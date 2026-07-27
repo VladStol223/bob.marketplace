@@ -295,20 +295,21 @@
     background: var(--bg-layer-1);
     padding: 16px;
     cursor: pointer;
+    overflow: hidden;
     transition: background var(--dur-fast);
     animation: cardIn var(--dur-moderate) var(--ease-entrance) both;
     animation-delay: calc(var(--i, 0) * 28ms);
     opacity: 0; transform: translateY(6px);
     z-index: 1;
   }
-  .card:has(.card-note.visible) { z-index: 100; }
+  .card:has(.card-note.visible) { z-index: 100; overflow: visible; }
   .card.hidden-card { display: none; }
   @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
   .card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0;
     height: 2px; background: var(--accent, var(--purple));
-    transform: scaleX(0); transform-origin: left;
+    transform: scaleX(0); transform-origin: center;
     transition: transform var(--dur-moderate) var(--ease-spring);
   }
   .card:hover { background: var(--bg-layer-2); }
