@@ -51,10 +51,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
     }
   }
 
@@ -62,81 +60,74 @@
 
   body {
     font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
     background: var(--bg);
     color: var(--text-primary);
-    min-height: 100dvh;
-    font-size: 15px;
-    line-height: 1.55;
-    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   .ambient {
-    position: fixed; inset: 0; z-index: 0;
-    pointer-events: none; overflow: hidden;
+    position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
   }
   .ambient::before, .ambient::after {
     content: '';
     position: absolute;
-    width: 560px; height: 560px;
+    width: 520px; height: 520px;
     border-radius: 50%;
-    filter: blur(140px);
-    opacity: 0.07;
-    animation: drift 34s ease-in-out infinite alternate;
+    opacity: 0.055;
+    filter: blur(90px);
+    animation: drift 30s ease-in-out infinite alternate;
   }
   .ambient::before { top: -240px; left: -140px; background: var(--purple); }
   .ambient::after  { bottom: -260px; right: -160px; background: var(--teal); animation-duration: 40s; animation-delay: -6s; }
   @keyframes drift {
-    from { transform: translate(0,0); }
-    to   { transform: translate(60px, 40px); }
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(60px, 40px) scale(1.08); }
   }
-
   a { color: inherit; }
 
   .scan-line {
-    position: fixed; top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--blue-hi), var(--teal), transparent);
-    z-index: 200;
-    transform: translateX(-100%);
-    animation: scan 1.1s var(--ease-standard) 0.15s forwards;
+    position: fixed; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue) 40%, var(--purple) 60%, transparent);
+    opacity: 0.45;
+    animation: scan 3.4s linear infinite;
+    z-index: 9999; pointer-events: none;
   }
   @keyframes scan { to { transform: translateX(100%); } }
 
-  /* ── HEADER ── */
   .site-header {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(19,19,19,0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    height: 48px;
+    background: rgba(19,19,19,0.88);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
-    padding: 0 24px; height: 52px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
   .header-logo {
-    display: flex; align-items: center; gap: 10px;
-    font-weight: 600; font-size: 0.92rem;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    text-decoration: none;
     color: var(--text-primary);
-    text-decoration: none; white-space: nowrap;
-    font-family: var(--font-mono);
   }
   .header-logo .mark {
-    width: 22px; height: 22px;
     display: flex; align-items: center; justify-content: center;
-    background: var(--blue); color: #0b0f19;
-    flex-shrink: 0;
+    width: 22px; height: 22px;
+    background: var(--purple); color: #fff; border-radius: 4px;
     transition: transform var(--dur-moderate) var(--ease-spring);
   }
   .header-logo:hover .mark { transform: rotate(-10deg) scale(1.08); }
   .header-logo .crumb { color: var(--text-helper); font-weight: 400; }
 
   .return-btn {
-    display: none; align-items: center; gap: 7px;
-    padding: 7px 14px;
-    border: 1px solid var(--border-strong);
-    background: transparent; color: var(--text-primary);
-    font-size: 0.8rem; font-weight: 500; font-family: var(--font-mono);
-    cursor: pointer; text-decoration: none; white-space: nowrap;
-    transition: background var(--dur-moderate) var(--ease-standard), border-color var(--dur-moderate) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+    display: none; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-secondary);
+    background: var(--bg-layer-1); border: 1px solid var(--border-subtle);
+    border-radius: 6px; padding: 4px 12px; cursor: pointer;
+    text-decoration: none;
+    transition: background var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast);
   }
   .return-btn:hover { background: var(--bg-layer-2); border-color: var(--blue-hi); }
   .return-btn:active { transform: scale(0.96); }
@@ -144,109 +135,97 @@
   .return-btn:hover svg { transform: translateX(-3px); }
   .return-btn.visible { display: flex; }
 
-  /* ── HERO ── */
   .hero {
-    max-width: 1160px; margin: 0 auto;
-    padding: 40px 24px 28px;
     position: relative; z-index: 1;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 48px 32px 36px;
+    max-width: 900px;
   }
   .hero-eyebrow {
-    font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-hi);
-    margin-bottom: 10px; opacity: 0;
-    animation: fadeUp 0.5s 0.05s var(--ease-entrance) forwards;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    color: var(--teal); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 12px;
   }
   .hero-title-row {
-    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-    opacity: 0; animation: fadeUp 0.5s 0.12s var(--ease-entrance) forwards;
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px;
   }
   .hero h1 {
-    font-size: clamp(1.7rem, 3.4vw, 2.35rem); font-weight: 700;
-    line-height: 1.15; color: var(--text-primary); letter-spacing: -0.01em;
+    font-size: clamp(26px, 4vw, 38px); font-weight: 700; letter-spacing: -0.02em;
+    animation: fadeUp var(--dur-expressive) var(--ease-entrance) both;
   }
   .hero-count {
-    font-family: var(--font-mono); font-size: 0.78rem;
-    color: var(--text-helper); border: 1px solid var(--border-strong);
-    padding: 3px 9px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-helper);
+    background: var(--bg-layer-1); border: 1px solid var(--border-subtle);
+    padding: 2px 8px; border-radius: 20px;
   }
   .hero p {
-    font-size: 0.95rem; color: var(--text-secondary);
-    max-width: 620px; margin: 12px 0 0;
-    opacity: 0; animation: fadeUp 0.5s 0.19s var(--ease-entrance) forwards;
+    font-size: 14px; color: var(--text-secondary); max-width: 520px; line-height: 1.7;
+    animation: fadeUp var(--dur-expressive) var(--ease-entrance) 60ms both;
   }
   .hero p strong { color: var(--text-primary); font-weight: 600; }
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── APP SHELL ── */
   .app {
-    max-width: 1160px; margin: 0 auto;
-    padding: 0 24px 90px;
-    display: grid; grid-template-columns: 220px 1fr;
-    gap: 32px; position: relative; z-index: 1;
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0 32px;
+    padding: 0 32px 64px;
+    max-width: 1280px;
   }
 
-  /* ── SIDEBAR ── */
   .rail {
-    padding-top: 24px; align-self: start;
-    position: sticky; top: 76px;
+    position: sticky; top: 56px; height: fit-content;
+    padding-top: 24px;
   }
-  .search-wrap { position: relative; margin-bottom: 20px; }
-  .search-wrap svg {
-    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-    color: var(--text-helper); pointer-events: none;
-    transition: color var(--dur-moderate) var(--ease-standard);
+  .search-wrap { position: relative; margin-bottom: 20px; display: flex; align-items: center; }
+  .search-wrap .search-icon {
+    position: absolute; left: 10px; color: var(--text-helper); pointer-events: none;
+    transition: color var(--dur-fast);
   }
+  .search-wrap:has(#search:focus) .search-icon { color: var(--blue-hi); }
   #search {
-    width: 100%; background: var(--bg-layer-1);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-primary); font-family: var(--font-mono);
-    font-size: 0.82rem; padding: 9px 30px 9px 32px; outline: none;
-    transition: border-color var(--dur-moderate) var(--ease-standard), background var(--dur-moderate) var(--ease-standard);
+    width: 100%; padding: 7px 32px 7px 30px;
+    background: var(--bg-layer-1); border: 1px solid var(--border-subtle);
+    border-radius: 6px; color: var(--text-primary);
+    font-family: var(--font-sans); font-size: 13px;
+    outline: none; transition: border-color var(--dur-fast), background var(--dur-fast);
   }
   #search::placeholder { color: var(--text-disabled); }
   #search:focus { border-color: var(--blue); background: var(--bg-layer-2); }
-  .search-wrap:has(#search:focus) svg { color: var(--blue-hi); }
   .search-clear {
-    position: absolute; right: 6px; top: 50%;
-    transform: translateY(-50%) scale(0.8);
-    background: none; border: none; color: var(--text-helper);
-    cursor: pointer; padding: 4px;
-    display: none; opacity: 0;
-    transition: opacity var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+    display: none; position: absolute; right: 0; top: 0; bottom: 0;
+    width: 32px; align-items: center; justify-content: center;
+    background: none; border: none; cursor: pointer; color: var(--text-helper);
+    transition: color var(--dur-fast);
   }
-  .search-clear.visible { display: flex; opacity: 1; }
+  .search-clear.visible { display: flex; }
   .search-clear:hover { color: var(--red); }
 
-  /* ── NAV SECTIONS ── */
   .nav-section-label {
-    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-disabled); padding: 12px 0 6px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-helper); padding: 16px 0 6px;
   }
   .nav-section-label:first-child { padding-top: 0; }
 
   .nav-list {
-    display: flex; flex-direction: column; list-style: none;
+    list-style: none; display: flex; flex-direction: column;
     border-top: 1px solid var(--border-subtle);
-    margin-bottom: 0;
   }
   .nav-item {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%; background: none; border: none;
+    position: relative; display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 12px;
+    font-size: 13px; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer; width: 100%; text-align: left;
+    transition: color var(--dur-fast), background var(--dur-fast), padding-left var(--dur-fast);
     border-bottom: 1px solid var(--border-subtle);
-    color: var(--text-secondary); font-family: var(--font-mono);
-    font-size: 0.82rem; padding: 10px 12px;
-    cursor: pointer; position: relative; text-align: left;
-    transition: color var(--dur-moderate) var(--ease-standard), background var(--dur-moderate) var(--ease-standard), padding-left var(--dur-moderate) var(--ease-standard);
   }
   .nav-item::before {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; background: var(--blue);
-    transform: scaleY(0);
+    width: 3px; background: var(--purple);
+    transform: scaleY(0); transform-origin: center;
     transition: transform var(--dur-moderate) var(--ease-spring);
   }
   .nav-item:hover { color: var(--text-primary); background: var(--bg-layer-1); padding-left: 16px; }
@@ -255,242 +234,219 @@
   .nav-item .count { color: var(--text-disabled); font-size: 0.76rem; }
   .nav-item.active .count { color: var(--blue-hi); }
 
-  /* audience nav uses teal accent */
   .nav-item.audience-item::before { background: var(--teal); }
   .nav-item.audience-item.active { color: var(--text-primary); }
   .nav-item.audience-item.active .count { color: var(--teal); }
 
   .rail-note {
-    margin-top: 20px; padding-top: 16px;
-    border-top: 1px solid var(--border-subtle);
-    font-size: 0.76rem; color: var(--text-disabled); line-height: 1.6;
+    margin-top: 20px; font-size: 11px; color: var(--text-helper); line-height: 1.6;
   }
   .rail-note code {
-    font-family: var(--font-mono); color: var(--text-helper);
-    background: var(--bg-layer-1); padding: 1px 4px;
+    font-family: var(--font-mono); font-size: 10px;
+    background: var(--bg-layer-2); border: 1px solid var(--border-subtle);
+    padding: 0 4px; border-radius: 3px;
   }
 
-  /* ── MAIN ── */
   .main-col { padding-top: 24px; min-width: 0; }
   .results-bar {
-    display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 16px;
-    font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-disabled);
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-helper);
+    font-family: var(--font-mono); margin-bottom: 16px;
   }
 
-  /* ── CARD GRID ── */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 0;
-    background: var(--bg-layer-1);
+    gap: 1px;
+    background: var(--border-subtle);
     border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    overflow: hidden;
   }
 
-  /* draw borders between cards with box-shadow so empty cells stay invisible */
   .card {
-    background: var(--bg-layer-1);
-    box-shadow: 1px 0 0 0 var(--border-subtle), 0 1px 0 0 var(--border-subtle);
-    display: flex; flex-direction: column;
     position: relative;
-    opacity: 0;
-    transform: translateY(8px);
-    animation: cardIn var(--dur-expressive) var(--ease-entrance) forwards;
-    animation-delay: calc(var(--i, 0) * 30ms);
-    transition: background var(--dur-moderate) var(--ease-standard);
+    display: flex; flex-direction: column;
+    background: var(--bg-layer-1);
+    padding: 16px;
+    cursor: pointer;
+    transition: background var(--dur-fast);
+    animation: cardIn var(--dur-moderate) var(--ease-entrance) both;
+    animation-delay: calc(var(--i, 0) * 28ms);
+    opacity: 0; transform: translateY(6px);
   }
   .card.hidden-card { display: none; }
   @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
 
-  /* left accent bar */
   .card::before {
-    content: ''; position: absolute;
-    left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--accent, var(--blue));
-    transform: scaleY(0);
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--accent, var(--purple));
+    transform: scaleX(0); transform-origin: left;
     transition: transform var(--dur-moderate) var(--ease-spring);
   }
   .card:hover { background: var(--bg-layer-2); }
-  .card:hover::before { transform: scaleY(1); }
+  .card:hover::before { transform: scaleX(1); }
 
-  /* top accent line */
   .card-top-line {
-    height: 3px;
-    background: var(--accent, var(--blue));
-    flex-shrink: 0;
+    height: 2px; background: var(--accent, var(--purple));
+    margin: -16px -16px 14px; opacity: 0.35;
   }
-
   .card-body {
-    padding: 16px 16px 12px;
-    display: flex; align-items: flex-start; gap: 12px;
-    flex: 1;
-    cursor: pointer;
+    display: flex; align-items: flex-start; gap: 12px; flex: 1;
   }
-
   .card-icon {
-    width: 36px; height: 36px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--bg-layer-3);
-    color: var(--accent, var(--blue));
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    background: var(--bg-layer-3); border: 1px solid var(--border-subtle);
+    border-radius: 8px; color: var(--accent, var(--purple));
     transition: transform var(--dur-moderate) var(--ease-spring);
   }
   .card:hover .card-icon { transform: rotate(-6deg) scale(1.08); }
 
   .card-meta { flex: 1; min-width: 0; }
   .card-type-tag {
-    font-family: var(--font-mono); font-size: 0.62rem; font-weight: 600;
+    display: inline-block; font-size: 10px; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 2px 6px; border: 1px solid var(--accent, var(--blue));
-    color: var(--accent, var(--blue));
-    display: inline-block; margin-bottom: 6px;
+    color: var(--accent, var(--purple)); margin-bottom: 4px;
   }
   .card-name {
-    font-size: 0.92rem; font-weight: 600;
-    color: var(--text-primary); line-height: 1.3;
-    margin-bottom: 5px;
+    font-size: 13px; font-weight: 600; color: var(--text-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 4px;
   }
   .card-tagline {
-    font-size: 0.8rem; color: var(--text-helper); line-height: 1.5;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-
-  /* ── CARD FOOTER (always-visible copy button) ── */
   .card-footer {
-    padding: 0 12px 12px;
-    display: flex; flex-direction: column; gap: 8px;
+    margin-top: 14px; display: flex; align-items: center;
+    justify-content: space-between; gap: 8px;
   }
-
-  .card-audience-chips {
-    display: flex; flex-wrap: wrap; gap: 5px;
-    padding: 0 4px 4px;
-  }
+  .card-audience-chips { display: flex; flex-wrap: wrap; gap: 4px; }
   .chip {
-    font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    padding: 2px 6px;
-    background: var(--bg-layer-3);
-    border: 1px solid var(--border-strong);
-    color: var(--text-disabled);
-    cursor: pointer;
-    transition: color var(--dur-fast) var(--ease-standard), border-color var(--dur-fast) var(--ease-standard);
+    font-size: 10px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 20px;
+    background: var(--bg-layer-3); border: 1px solid var(--border-subtle);
+    color: var(--text-helper); cursor: pointer;
+    transition: color var(--dur-fast), border-color var(--dur-fast);
   }
   .chip:hover { color: var(--teal); border-color: var(--teal); }
 
   .card-copy-btn {
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-    width: 100%; padding: 9px 14px;
-    background: var(--bg-layer-3);
-    border: 1px solid var(--border-strong);
-    color: var(--text-secondary); font-family: var(--font-mono);
-    font-size: 0.78rem; font-weight: 500;
-    cursor: pointer; position: relative; overflow: hidden;
-    transition: background var(--dur-moderate) var(--ease-standard), border-color var(--dur-moderate) var(--ease-standard), color var(--dur-moderate) var(--ease-standard);
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    padding: 5px 10px; border-radius: 5px;
+    background: var(--bg-layer-3); border: 1px solid var(--border-subtle);
+    color: var(--text-secondary); cursor: pointer;
+    position: relative; overflow: hidden;
+    transition: background var(--dur-fast), border-color var(--dur-fast),
+                color var(--dur-fast), transform var(--dur-fast);
   }
   .card-copy-btn::before {
-    content: ''; position: absolute; top: 0; left: -60%;
-    width: 40%; height: 100%;
-    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.1), transparent);
-    transform: skewX(-20deg);
-    transition: left 0.5s var(--ease-standard);
+    content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    transition: left 0.4s;
   }
   .card-copy-btn:hover::before { left: 130%; }
   .card-copy-btn:hover { background: rgba(69,137,255,0.12); border-color: var(--blue-hi); color: var(--blue-hi); }
   .card-copy-btn:active { transform: scale(0.98); }
   .card-copy-btn.copied {
     background: rgba(66,190,101,0.12); border-color: var(--green); color: var(--green);
-    animation: pulseGreen 0.5s var(--ease-standard);
+    animation: pulseGreen 0.4s var(--ease-spring);
   }
   @keyframes pulseGreen {
-    0%   { box-shadow: 0 0 0 0 rgba(66,190,101,0.45); }
-    70%  { box-shadow: 0 0 0 8px rgba(66,190,101,0); }
-    100% { box-shadow: 0 0 0 0 rgba(66,190,101,0); }
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
   }
 
-  /* ── POST-COPY INSTRUCTION BANNER ── */
   .card-note {
-    display: flex; align-items: flex-start; gap: 7px;
-    font-size: 0.75rem; color: var(--text-helper); line-height: 1.5;
-    opacity: 0; max-height: 0; overflow: hidden;
-    transition: opacity var(--dur-moderate) var(--ease-standard);
+    display: none; opacity: 0; max-height: 0;
+    align-items: flex-start; gap: 6px;
+    margin-top: 10px; padding: 8px 10px;
+    background: rgba(8,189,186,0.08); border: 1px solid rgba(8,189,186,0.25);
+    border-radius: 5px; font-size: 12px; color: var(--text-secondary);
   }
-  .card-note.visible { opacity: 1; max-height: none; }
+  .card-note.visible { opacity: 1; max-height: none; display: flex; }
   .card-note svg { flex-shrink: 0; margin-top: 1px; color: var(--teal); }
   .card-note strong { color: var(--text-primary); }
 
-  /* ── DETAIL DRAWER (sits below the grid, outside it) ── */
+  /* detail drawer — spans full grid width */
   .detail-drawer {
-    background: var(--bg-layer-2);
-    border: 1px solid var(--border-subtle);
-    border-top: 2px solid var(--accent, var(--blue));
-    margin-top: 1px;
+    grid-column: 1 / -1;
     display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows var(--dur-expressive) var(--ease-standard),
-                border-color var(--dur-moderate) var(--ease-standard);
+    transition: grid-template-rows var(--dur-expressive) var(--ease-standard);
+    background: var(--bg-layer-2);
+    border-top: 1px solid var(--border-subtle);
   }
   .detail-drawer.open { grid-template-rows: 1fr; }
   .detail-drawer-inner { overflow: hidden; }
   .detail-drawer-pad { padding: 20px 24px 24px; }
 
   .detail-desc {
-    font-size: 0.86rem; color: var(--text-secondary);
-    line-height: 1.65; margin-bottom: 14px; max-width: 640px;
+    font-size: 13px; color: var(--text-secondary); line-height: 1.7;
+    margin-bottom: 16px; max-width: 680px;
   }
 
   .terminal {
     background: var(--bg); border: 1px solid var(--border-subtle);
-    max-width: 640px;
-    transition: border-color var(--dur-moderate) var(--ease-standard), box-shadow var(--dur-moderate) var(--ease-standard);
+    border-radius: 8px; overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
   .terminal.copied { border-color: var(--green); box-shadow: 0 0 0 1px rgba(66,190,101,0.25); }
   .terminal-tab {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    padding: 7px 10px; background: var(--bg-layer-2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; background: var(--bg-layer-1);
     border-bottom: 1px solid var(--border-subtle);
   }
   .terminal-tab-name {
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-helper);
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 7px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-helper);
   }
   .terminal-tab-name .dot {
-    width: 6px; height: 6px; background: var(--accent, var(--blue)); flex-shrink: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent, var(--purple)); opacity: 0.8;
   }
   .terminal-copy-btn {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--bg-layer-3); border: 1px solid var(--border-strong);
-    color: var(--text-primary); font-family: var(--font-mono);
-    font-size: 0.72rem; font-weight: 500; padding: 5px 10px;
-    cursor: pointer; position: relative; overflow: hidden;
-    transition: background var(--dur-moderate) var(--ease-standard), border-color var(--dur-moderate) var(--ease-standard), color var(--dur-moderate) var(--ease-standard);
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-mono); font-size: 11px;
+    padding: 4px 10px; border-radius: 5px;
+    background: var(--bg-layer-2); border: 1px solid var(--border-subtle);
+    color: var(--text-helper); cursor: pointer;
+    transition: background var(--dur-fast), border-color var(--dur-fast),
+                color var(--dur-fast), transform var(--dur-fast);
   }
   .terminal-copy-btn:hover { background: rgba(69,137,255,0.14); border-color: var(--blue-hi); color: var(--blue-hi); }
   .terminal-copy-btn:active { transform: scale(0.96); }
   .terminal-copy-btn.copied { background: rgba(66,190,101,0.14); border-color: var(--green); color: var(--green); }
   .terminal-body {
-    max-height: 210px; overflow-y: auto; padding: 12px 14px;
+    padding: 14px 16px; max-height: 320px; overflow-y: auto;
   }
   .terminal-body pre {
-    font-family: var(--font-mono); font-size: 0.74rem; line-height: 1.6;
-    color: var(--text-secondary); white-space: pre-wrap; word-break: break-word;
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);
+    white-space: pre-wrap; word-break: break-word; line-height: 1.65;
   }
   .terminal-body::-webkit-scrollbar { width: 8px; }
   .terminal-body::-webkit-scrollbar-track { background: var(--bg); }
   .terminal-body::-webkit-scrollbar-thumb { background: var(--border-strong); }
   .cursor {
-    display: inline-block; width: 6px; height: 12px;
-    background: var(--blue-hi); margin-left: 2px; vertical-align: -2px;
-    animation: blink 1s steps(1) infinite;
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--teal); opacity: 0.8; vertical-align: text-bottom;
+    animation: blink 1.1s step-end infinite;
+    margin-left: 2px;
   }
   @keyframes blink { 50% { opacity: 0; } }
 
-  /* ── EMPTY STATE ── */
   .empty-state {
-    display: none; padding: 60px 20px; text-align: center;
-    border: 1px dashed var(--border-strong);
-    color: var(--text-helper); font-family: var(--font-mono); font-size: 0.85rem;
+    display: none;
+    padding: 48px 0; text-align: center;
+    font-size: 14px; color: var(--text-helper); line-height: 1.7;
   }
   .empty-state.visible { display: block; animation: fadeUp var(--dur-moderate) var(--ease-entrance); }
   .empty-state strong { color: var(--text-primary); }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 780px) {
     .app { grid-template-columns: 1fr; gap: 0; }
     .rail { position: static; padding-top: 20px; padding-bottom: 8px; }
@@ -511,7 +467,6 @@
 <div class="scan-line" aria-hidden="true"></div>
 <div class="ambient" aria-hidden="true"></div>
 
-<!-- ── HEADER ── -->
 <header class="site-header">
   <a class="header-logo" href="#">
     <span class="mark">
@@ -521,28 +476,25 @@
   </a>
   <a class="return-btn" id="return-btn" href="#">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-    return to lab
+    back
   </a>
 </header>
 
-<!-- ── HERO ── -->
 <div class="hero">
   <div class="hero-eyebrow">// IBM Bob — extension registry</div>
   <div class="hero-title-row">
     <h1>Modes &amp; Skills</h1>
-    <span class="hero-count" id="hero-count">18 entries</span>
+    <span class="hero-count" id="hero-count">loading…</span>
   </div>
   <p>Modes change how Bob thinks. Skills change what it can do. Hit <strong>copy prompt</strong> on any card, paste into Bob — it downloads and installs itself.</p>
 </div>
 
-<!-- ── APP ── -->
 <div class="app">
 
-  <!-- ── SIDEBAR ── -->
   <aside class="rail">
     <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="search" placeholder="filter entries…" autocomplete="off" spellcheck="false" />
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search" placeholder="search…" autocomplete="off" spellcheck="false" />
       <button class="search-clear" id="search-clear" type="button" aria-label="Clear search">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -550,14 +502,14 @@
 
     <div class="nav-section-label">Type</div>
     <ul class="nav-list" id="type-nav" role="tablist">
-      <li><button class="nav-item active" data-type="all" role="tab" aria-selected="true">all <span class="count" id="count-all">18</span></button></li>
-      <li><button class="nav-item" data-type="mode" role="tab" aria-selected="false">modes <span class="count" id="count-mode">9</span></button></li>
-      <li><button class="nav-item" data-type="skill" role="tab" aria-selected="false">skills <span class="count" id="count-skill">9</span></button></li>
+      <li><button class="nav-item active" data-type="all" role="tab" aria-selected="true">all <span class="count" id="count-all">–</span></button></li>
+      <li><button class="nav-item" data-type="mode" role="tab" aria-selected="false">modes <span class="count" id="count-mode">–</span></button></li>
+      <li><button class="nav-item" data-type="skill" role="tab" aria-selected="false">skills <span class="count" id="count-skill">–</span></button></li>
     </ul>
 
     <div class="nav-section-label" style="margin-top:16px">Audience</div>
     <ul class="nav-list" id="audience-nav" role="tablist">
-      <li><button class="nav-item audience-item active" data-audience="all" role="tab" aria-selected="true">everyone <span class="count" id="count-aud-all">18</span></button></li>
+      <li><button class="nav-item audience-item active" data-audience="all" role="tab" aria-selected="true">everyone <span class="count" id="count-aud-all">–</span></button></li>
       <li><button class="nav-item audience-item" data-audience="developer" role="tab" aria-selected="false">developer <span class="count" id="count-aud-developer">0</span></button></li>
       <li><button class="nav-item audience-item" data-audience="data" role="tab" aria-selected="false">data analyst <span class="count" id="count-aud-data">0</span></button></li>
       <li><button class="nav-item audience-item" data-audience="devops" role="tab" aria-selected="false">devops <span class="count" id="count-aud-devops">0</span></button></li>
@@ -569,18 +521,12 @@
     <div class="rail-note">Installing writes to <code>.bob/custom_modes.yaml</code> or <code>.bob/skills/</code> in your workspace.</div>
   </aside>
 
-  <!-- ── MAIN ── -->
   <main class="main-col">
     <div class="results-bar">
-      <span id="results-count">18 results</span>
+      <span id="results-count"></span>
       <span id="results-filter"></span>
     </div>
     <div class="grid" id="grid"></div>
-    <div class="detail-drawer" id="detail-drawer">
-      <div class="detail-drawer-inner">
-        <div class="detail-drawer-pad" id="detail-drawer-pad"></div>
-      </div>
-    </div>
     <div class="empty-state" id="empty-state">
       No entries match <strong id="empty-query"></strong>. Try a different search or filter.
     </div>
@@ -588,191 +534,10 @@
 
 </div>
 
-<!-- ── PROMPT BANK (hidden) ── -->
-<div style="display:none" id="prompt-bank">
-  <pre id="prompt-qisbob">Download the file at https://vladstol223.github.io/wd.bob/QisBob.yaml and save it as `QisBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content QisBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' QisBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "QisBob Quantum Mentor" in the Bob mode picker.</pre>
-
-  <pre id="prompt-pybob">Download the file at https://vladstol223.github.io/wd.bob/PyBob.yaml and save it as `PyBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content PyBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' PyBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "PyBob Python Mentor" in the Bob mode picker.</pre>
-
-  <pre id="prompt-sqlbob">Download the file at https://vladstol223.github.io/wd.bob/SqlBob.yaml and save it as `SqlBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content SqlBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' SqlBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "SqlBob Database Mentor" in the Bob mode picker.</pre>
-
-  <pre id="prompt-dataanalyst">Download the file at https://vladstol223.github.io/bob-marketplace/DataAnalyst.yaml and save it as `DataAnalyst.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content DataAnalyst.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' DataAnalyst.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "DataAnalyst" in the Bob mode picker.</pre>
-
-  <pre id="prompt-runbook">Download the file at https://vladstol223.github.io/bob-marketplace/RunbookBob.yaml and save it as `RunbookBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content RunbookBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' RunbookBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "RunbookBob" in the Bob mode picker.</pre>
-
-  <pre id="prompt-pitchcoach">Download the file at https://vladstol223.github.io/bob-marketplace/PitchCoach.yaml and save it as `PitchCoach.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content PitchCoach.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' PitchCoach.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "PitchCoach" in the Bob mode picker.</pre>
-
-  <pre id="prompt-refactorbob">Download the file at https://vladstol223.github.io/bob-marketplace/RefactorBob.yaml and save it as `RefactorBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content RefactorBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' RefactorBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "RefactorBob" in the Bob mode picker.</pre>
-
-  <pre id="prompt-productbob">Download the file at https://vladstol223.github.io/bob-marketplace/ProductBob.yaml and save it as `ProductBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content ProductBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' ProductBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "ProductBob" in the Bob mode picker.</pre>
-
-  <pre id="prompt-securitybob">Download the file at https://vladstol223.github.io/bob-marketplace/SecurityBob.yaml and save it as `SecurityBob.yaml` in my workspace folder.
-
-Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
-
-- Windows (PowerShell):
-  $lines = Get-Content SecurityBob.yaml -Encoding UTF8
-  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
-  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
-  New-Item -ItemType Directory -Force -Path .bob | Out-Null
-  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
-
-- macOS / Linux:
-  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' SecurityBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
-
-Confirm when done and tell me to switch to "SecurityBob" in the Bob mode picker.</pre>
-
-  <pre id="prompt-xlsx">Download the file at https://vladstol223.github.io/bob-marketplace/skills/xlsx-insights.md and save it as `.bob/skills/xlsx-insights.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-diagram">Download the file at https://vladstol223.github.io/bob-marketplace/skills/diagram-gen.md and save it as `.bob/skills/diagram-gen.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-pr">Download the file at https://vladstol223.github.io/bob-marketplace/skills/create-pr.md and save it as `.bob/skills/create-pr.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-testgen">Download the file at https://vladstol223.github.io/bob-marketplace/skills/test-gen.md and save it as `.bob/skills/test-gen.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-docwriter">Download the file at https://vladstol223.github.io/bob-marketplace/skills/doc-writer.md and save it as `.bob/skills/doc-writer.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-envsetup">Download the file at https://vladstol223.github.io/bob-marketplace/skills/env-setup.md and save it as `.bob/skills/env-setup.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-csvclean">Download the file at https://vladstol223.github.io/bob-marketplace/skills/csv-clean.md and save it as `.bob/skills/csv-clean.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-apimock">Download the file at https://vladstol223.github.io/bob-marketplace/skills/api-mock.md and save it as `.bob/skills/api-mock.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-
-  <pre id="prompt-i18n">Download the file at https://vladstol223.github.io/bob-marketplace/skills/i18n-extract.md and save it as `.bob/skills/i18n-extract.md` in my workspace folder. Create the directory if it doesn't exist.
-
-Confirm when the file is saved.</pre>
-</div>
-
 <script>
 (function() {
+
+  var BASE = 'https://vladstol223.github.io/bob.marketplace/';
 
   var ICONS = {
     clock:   '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
@@ -795,7 +560,6 @@ Confirm when the file is saved.</pre>
     globe:   '<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'
   };
 
-  // audience labels → display text
   var AUDIENCE_LABELS = {
     developer: 'dev',
     data:      'data',
@@ -805,106 +569,70 @@ Confirm when the file is saved.</pre>
     learner:   'learner'
   };
 
-  var DATA = [
-    { id:'qisbob',      type:'mode',  icon:'clock',   audience:['learner','developer','exec'],
-      name:'QisBob — Quantum Mentor',      tagline:'Socratic quantum computing tutor with Qiskit v2.0+ on real IBM hardware.',
-      desc:'QisBob assesses your Python level, picks a learning track (Executive, Developer, or Hardware), and walks you gate by gate through Qiskit circuits — quizzing you at every step. Never lectures; always asks first.' },
+  // ── Generate install prompt from registry entry ──────────
+  function buildPrompt(item) {
+    var fileUrl  = BASE + item.file;
+    var filename = item.file.split('/').pop();
 
-    { id:'pybob',       type:'mode',  icon:'swap',    audience:['learner','developer'],
-      name:'PyBob — Python Mentor',        tagline:'Guided Python learning from zero to production-ready code.',
-      desc:'PyBob acts as a patient Python tutor that meets you at your current level. It diagnoses gaps, runs mini-challenges, and builds up to real scripts — one concept at a time.' },
+    if (item.type === 'mode') {
+      return 'Download the file at ' + fileUrl + ' and save it as `' + filename + '` in my workspace folder.\n\n' +
+        'Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:\n\n' +
+        '- Windows (PowerShell):\n' +
+        '  $lines = Get-Content ' + filename + ' -Encoding UTF8\n' +
+        '  $fixed = $lines | ForEach-Object { if ($_ -match \'^\\s\') { $_ -replace \'^  \', \'\' } else { $_ } }\n' +
+        '  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })\n' +
+        '  New-Item -ItemType Directory -Force -Path .bob | Out-Null\n' +
+        '  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8\n\n' +
+        '- macOS / Linux:\n' +
+        '  mkdir -p .bob && printf \'customModes:\\n\' > .bob/custom_modes.yaml && sed \'s/^  //\' ' + filename + ' | sed \'s/^/  /\' >> .bob/custom_modes.yaml\n\n' +
+        'Confirm when done and tell me to switch to "' + item.install_name + '" in the Bob mode picker.';
+    } else {
+      var dest = '.bob/skills/' + filename;
+      return 'Download the file at ' + fileUrl + ' and save it as `' + dest + '` in my workspace folder. Create the directory if it doesn\'t exist.\n\nConfirm when the file is saved.';
+    }
+  }
 
-    { id:'sqlbob',      type:'mode',  icon:'db',      audience:['learner','developer','data'],
-      name:'SqlBob — Database Mentor',     tagline:'Learn SQL from SELECT to advanced analytics, guided by a patient tutor.',
-      desc:'SqlBob teaches database querying from scratch using real-world retail scenarios. It explains the WHY behind every clause, runs interactive challenges, and builds toward production-grade queries.' },
+  // ── DOM refs ─────────────────────────────────────────────
+  var gridEl          = document.getElementById('grid');
+  var emptyEl         = document.getElementById('empty-state');
+  var emptyQueryEl    = document.getElementById('empty-query');
+  var resultsCountEl  = document.getElementById('results-count');
+  var resultsFilterEl = document.getElementById('results-filter');
 
-    { id:'dataanalyst', type:'mode',  icon:'bars',    audience:['data','exec','pm'],
-      name:'DataAnalyst — Insights Mode',  tagline:'Turns raw CSV or JSON data into structured analysis and plain-English summaries.',
-      desc:'Drop any dataset into Bob and DataAnalyst takes over — cleaning, summarising, spotting anomalies, and generating chart-ready output. No statistics background required.' },
+  // shared drawer — inserted into the grid on each open
+  var drawerEl = document.createElement('div');
+  drawerEl.className = 'detail-drawer';
+  drawerEl.id = 'detail-drawer';
+  drawerEl.innerHTML = '<div class="detail-drawer-inner"><div class="detail-drawer-pad" id="detail-drawer-pad"></div></div>';
+  var drawerPadEl;
 
-    { id:'runbook',     type:'mode',  icon:'file',    audience:['devops','developer'],
-      name:'RunbookBob — Ops Documenter',  tagline:'Converts incident logs and error traces into structured runbooks your team can actually follow.',
-      desc:'Paste any error log, incident report, or system alert. RunbookBob diagnoses root cause, maps the blast radius, and writes a plain-English runbook with escalation paths — in minutes.' },
-
-    { id:'pitchcoach',  type:'mode',  icon:'chat',    audience:['pm','exec'],
-      name:'PitchCoach — Presentation Mode', tagline:'Stress-tests your ideas and builds executive-ready pitches from rough notes.',
-      desc:'Describe your idea in plain English. PitchCoach challenges your assumptions with hard questions, identifies the weakest points, then structures a compelling 5-minute pitch with a clear ask.' },
-
-    { id:'refactorbob', type:'mode',  icon:'refresh', audience:['developer'],
-      name:'RefactorBob — Code Review Mode', tagline:'Reviews any code for clarity, performance, and safety — then rewrites it cleanly.',
-      desc:'Paste any function, file, or snippet. RefactorBob gives you a structured code review — naming, logic, edge cases, security — and produces a clean rewrite with change annotations.' },
-
-    { id:'productbob',  type:'mode',  icon:'monitor', audience:['pm','developer'],
-      name:'ProductBob — PM Assistant',    tagline:'Turns vague feature requests into structured PRDs, user stories, and acceptance criteria.',
-      desc:'Describe what you want to build in plain English. ProductBob asks clarifying questions, identifies edge cases, then produces a full PRD with user stories, acceptance criteria, and a prioritised backlog.' },
-
-    { id:'securitybob', type:'mode',  icon:'shield',  audience:['developer','devops'],
-      name:'SecurityBob — Threat Reviewer', tagline:'Audits code and system designs for vulnerabilities and produces a remediation plan.',
-      desc:'Paste code, architecture diagrams, or config files. SecurityBob maps attack surface, identifies OWASP-class vulnerabilities, assigns severity, and outputs a prioritised fix list with remediation code.' },
-
-    { id:'xlsx',        type:'skill', icon:'sheet',   audience:['data','exec','pm'],
-      name:'xlsx-insights',  tagline:'Analyse Excel workbooks — summaries, pivot logic, anomaly detection.',
-      desc:"Give Bob any .xlsx file and this skill samples the workbook, writes a short Node script to compute the answer, runs it, and summarises the result — without loading the full file into context." },
-
-    { id:'diagram',     type:'skill', icon:'grid',    audience:['developer','devops','pm'],
-      name:'diagram-gen',    tagline:'Generates Mermaid or D2 diagrams from plain-English descriptions.',
-      desc:'Describe a system, process, or data flow in plain English. diagram-gen picks the right diagram type (flowchart, sequence, ER, C4), writes valid Mermaid syntax, and renders a preview inline.' },
-
-    { id:'pr',          type:'skill', icon:'branch',  audience:['developer'],
-      name:'create-pr',      tagline:'Generates pull request descriptions from git diffs and opens the PR on GitHub.',
-      desc:'Run this skill after committing your changes. Bob reads the diff, writes a structured PR description (what changed, why, how to test), lets you review it, then opens the PR directly on GitHub.' },
-
-    { id:'testgen',     type:'skill', icon:'check',   audience:['developer'],
-      name:'test-gen',       tagline:'Writes unit and integration tests for any function or module you point it at.',
-      desc:"Point test-gen at any file and it analyses the logic, identifies edge cases, and writes a full test suite in your project's framework (Jest, pytest, Go test, etc.) — ready to run immediately." },
-
-    { id:'docwriter',   type:'skill', icon:'edit',    audience:['developer','pm'],
-      name:'doc-writer',     tagline:'Generates README files, API docs, and inline comments from your codebase.',
-      desc:"Point doc-writer at any file or folder. It reads the code structure, infers intent, and writes a full README, JSDoc/docstring comments, and a usage guide — all in your project's existing style." },
-
-    { id:'envsetup',    type:'skill', icon:'gear',    audience:['developer','learner'],
-      name:'env-setup',      tagline:'Detects your OS and project type, then scaffolds a complete dev environment.',
-      desc:"Tell Bob what you're building. env-setup detects your OS and package manager, installs dependencies, creates `.env` templates, sets up linting and formatting, and runs a smoke test — start to finish." },
-
-    { id:'csvclean',    type:'skill', icon:'list',    audience:['data','developer'],
-      name:'csv-clean',      tagline:'Detects and fixes malformed CSV files — encoding, delimiters, nulls, duplicates.',
-      desc:'Drop any CSV and csv-clean profiles it for encoding issues, inconsistent delimiters, null patterns, duplicates, and type mismatches — then writes a cleaned version and a diff report.' },
-
-    { id:'apimock',     type:'skill', icon:'swap2',   audience:['developer','devops'],
-      name:'api-mock',       tagline:'Generates a working mock API server from an OpenAPI spec or plain description.',
-      desc:'Paste an OpenAPI YAML or describe your endpoints in plain English. api-mock writes a runnable Express/FastAPI mock server with realistic fixture data, ready to use as a dev backend in minutes.' },
-
-    { id:'i18n',        type:'skill', icon:'globe',   audience:['developer'],
-      name:'i18n-extract',   tagline:'Extracts hardcoded strings from a UI codebase and generates locale JSON files.',
-      desc:'Point i18n-extract at any frontend codebase. It finds all hardcoded user-visible strings, replaces them with i18n keys, and writes a `en.json` locale file — ready to hand to a translator.' }
-  ];
-
-  // ── DOM refs ──────────────────────────────────────────
-  var gridEl         = document.getElementById('grid');
-  var drawerEl       = document.getElementById('detail-drawer');
-  var drawerPadEl    = document.getElementById('detail-drawer-pad');
-  var emptyEl        = document.getElementById('empty-state');
-  var emptyQueryEl   = document.getElementById('empty-query');
-  var resultsCountEl = document.getElementById('results-count');
-  var resultsFilterEl= document.getElementById('results-filter');
+  // ── Filters state ────────────────────────────────────────
+  var currentType     = 'all';
+  var currentAudience = 'all';
+  var currentQuery    = '';
+  var allCards        = [];
+  var activeCard      = null;
 
   function accentVar(type) {
     return type === 'mode' ? 'var(--purple)' : 'var(--teal)';
   }
 
-  // ── BUILD CARD (grid tile only — no detail inside grid) ──
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ── Build card DOM node ───────────────────────────────────
   function buildCard(item, idx) {
     var card = document.createElement('div');
     card.className = 'card';
     card.style.setProperty('--i', idx);
     card.style.setProperty('--accent', accentVar(item.type));
-    card.dataset.type = item.type;
-    card.dataset.id = item.id;
+    card.dataset.type     = item.type;
+    card.dataset.id       = item.id;
     card.dataset.audience = item.audience.join(' ');
-    card.dataset.search = (item.name + ' ' + item.tagline + ' ' + item.desc + ' ' + item.audience.join(' ')).toLowerCase();
+    card.dataset.search   = (item.name + ' ' + item.tagline + ' ' + item.desc + ' ' + item.audience.join(' ')).toLowerCase();
 
-    var promptText = (document.getElementById('prompt-' + item.id) || {}).textContent || '';
-    card._promptText = promptText;
+    card._promptText = buildPrompt(item);
     card._item = item;
     card._open = false;
 
@@ -915,11 +643,11 @@ Confirm when the file is saved.</pre>
     card.innerHTML =
       '<div class="card-top-line"></div>' +
       '<div class="card-body">' +
-        '<div class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[item.icon] + '</svg></div>' +
+        '<div class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[item.icon] || '') + '</svg></div>' +
         '<div class="card-meta">' +
           '<span class="card-type-tag">' + item.type + '</span>' +
-          '<div class="card-name">' + item.name + '</div>' +
-          '<div class="card-tagline">' + item.tagline + '</div>' +
+          '<div class="card-name">' + escapeHtml(item.name) + '</div>' +
+          '<div class="card-tagline">' + escapeHtml(item.tagline) + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="card-footer">' +
@@ -937,21 +665,7 @@ Confirm when the file is saved.</pre>
     return card;
   }
 
-  function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  // ── RENDER ────────────────────────────────────────────
-  var allCards = [];
-  DATA.forEach(function(item, idx) {
-    var card = buildCard(item, idx);
-    gridEl.appendChild(card);   // only cards go in the grid
-    allCards.push(card);
-  });
-
-  // ── OPEN/CLOSE SHARED DRAWER ─────────────────────────
-  var activeCard = null;
-
+  // ── Drawer open / close ───────────────────────────────────
   function openCard(card) {
     if (activeCard && activeCard !== card) {
       activeCard._open = false;
@@ -961,12 +675,23 @@ Confirm when the file is saved.</pre>
     card._open = true;
     card.classList.add('card--open');
 
-    // populate drawer with this card's detail
-    var item = card._item;
+    var clickedTop   = card.getBoundingClientRect().top;
+    var visibleCards = allCards.filter(function(c) { return !c.classList.contains('hidden-card'); });
+    var lastInRow    = card;
+    for (var i = 0; i < visibleCards.length; i++) {
+      var c = visibleCards[i];
+      if (Math.abs(c.getBoundingClientRect().top - clickedTop) < 4) lastInRow = c;
+    }
+
+    drawerEl.classList.remove('open');
+    lastInRow.after(drawerEl);
+    drawerPadEl = document.getElementById('detail-drawer-pad');
+
+    var item       = card._item;
     var promptText = card._promptText;
     drawerEl.style.setProperty('--accent', accentVar(item.type));
     drawerPadEl.innerHTML =
-      '<p class="detail-desc">' + item.desc + '</p>' +
+      '<p class="detail-desc">' + escapeHtml(item.desc) + '</p>' +
       '<div class="terminal">' +
         '<div class="terminal-tab">' +
           '<span class="terminal-tab-name"><span class="dot"></span>install.prompt</span>' +
@@ -977,7 +702,13 @@ Confirm when the file is saved.</pre>
         '</div>' +
         '<div class="terminal-body"><pre>' + escapeHtml(promptText) + '<span class="cursor" aria-hidden="true"></span></pre></div>' +
       '</div>';
-    drawerEl.classList.add('open');
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        drawerEl.classList.add('open');
+        drawerEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
   }
 
   function closeDrawer() {
@@ -995,7 +726,7 @@ Confirm when the file is saved.</pre>
     gtag('event', 'card_toggle', { item: card.dataset.type, open: card._open });
   }
 
-  // ── EVENTS ───────────────────────────────────────────
+  // ── Events ────────────────────────────────────────────────
   gridEl.addEventListener('click', function(e) {
     var copyBtn = e.target.closest('[data-copy]');
     if (copyBtn) { e.stopPropagation(); doCopy(copyBtn, null); return; }
@@ -1005,23 +736,20 @@ Confirm when the file is saved.</pre>
     if (card) toggleCard(card);
   });
 
-  // copy from drawer terminal button
   drawerEl.addEventListener('click', function(e) {
     var copyBtn = e.target.closest('[data-copy]');
     if (copyBtn && activeCard) doCopy(copyBtn, activeCard);
   });
 
-  // ── COPY ─────────────────────────────────────────────
+  // ── Copy ──────────────────────────────────────────────────
   function doCopy(btn, card) {
     var id = btn.getAttribute('data-copy');
-    // find the card by id if not passed directly
-    if (!card) card = allCards.filter(function(c){ return c.dataset.id === id; })[0];
+    if (!card) card = allCards.filter(function(c) { return c.dataset.id === id; })[0];
     if (!card) return;
     var text = card._promptText ? card._promptText.trim() : '';
     if (!text) return;
 
     function afterCopy() {
-      // update the card's own copy button
       var cardBtn = card.querySelector('.card-copy-btn');
       var note    = card.querySelector('.card-note');
       if (cardBtn) {
@@ -1035,24 +763,25 @@ Confirm when the file is saved.</pre>
       }
       if (note) note.classList.add('visible');
 
-      // update drawer terminal button if drawer is showing this card
-      var termBtn  = drawerPadEl.querySelector('.terminal-copy-btn');
-      var terminal = drawerPadEl.querySelector('.terminal');
-      if (termBtn) {
-        var tlbl = termBtn.querySelector('.copy-label');
-        termBtn.classList.add('copied');
-        if (tlbl) tlbl.textContent = 'copied';
-        setTimeout(function() {
-          termBtn.classList.remove('copied');
-          if (tlbl) tlbl.textContent = 'copy';
-        }, 2200);
+      if (drawerPadEl) {
+        var termBtn  = drawerPadEl.querySelector('.terminal-copy-btn');
+        var terminal = drawerPadEl.querySelector('.terminal');
+        if (termBtn) {
+          var tlbl = termBtn.querySelector('.copy-label');
+          termBtn.classList.add('copied');
+          if (tlbl) tlbl.textContent = 'copied';
+          setTimeout(function() {
+            termBtn.classList.remove('copied');
+            if (tlbl) tlbl.textContent = 'copy';
+          }, 2200);
+        }
+        if (terminal) { terminal.classList.add('copied'); setTimeout(function() { terminal.classList.remove('copied'); }, 900); }
       }
-      if (terminal) { terminal.classList.add('copied'); setTimeout(function(){ terminal.classList.remove('copied'); }, 900); }
       gtag('event', 'install_copy', { item: id });
     }
 
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(afterCopy).catch(function(){ fallbackCopy(text); afterCopy(); });
+      navigator.clipboard.writeText(text).then(afterCopy).catch(function() { fallbackCopy(text); afterCopy(); });
     } else {
       fallbackCopy(text); afterCopy();
     }
@@ -1067,11 +796,7 @@ Confirm when the file is saved.</pre>
     document.body.removeChild(ta);
   }
 
-  // ── FILTER STATE ─────────────────────────────────────
-  var currentType     = 'all';
-  var currentAudience = 'all';
-  var currentQuery    = '';
-
+  // ── Filters ───────────────────────────────────────────────
   function applyFilters() {
     var visible = 0;
     allCards.forEach(function(card) {
@@ -1080,7 +805,6 @@ Confirm when the file is saved.</pre>
       var matchQuery    = !currentQuery || card.dataset.search.indexOf(currentQuery) !== -1;
       var show = matchType && matchAudience && matchQuery;
       card.classList.toggle('hidden-card', !show);
-      // if the active card is being hidden, close the drawer
       if (!show && card._open) closeDrawer();
       if (show) visible++;
     });
@@ -1093,7 +817,6 @@ Confirm when the file is saved.</pre>
     emptyQueryEl.textContent = currentQuery ? '"' + currentQuery + '"' : 'this filter';
   }
 
-  // update audience badge counts based on current type+search only
   function updateAudienceCounts() {
     var audiences = ['developer','data','devops','pm','exec','learner'];
     audiences.forEach(function(aud) {
@@ -1105,7 +828,6 @@ Confirm when the file is saved.</pre>
       var el = document.getElementById('count-aud-' + aud);
       if (el) el.textContent = n;
     });
-    // all
     var nAll = allCards.filter(function(card) {
       var matchType  = currentType === 'all' || card.dataset.type === currentType;
       var matchQuery = !currentQuery || card.dataset.search.indexOf(currentQuery) !== -1;
@@ -1145,7 +867,7 @@ Confirm when the file is saved.</pre>
     btn.addEventListener('click', function() { setAudience(btn.getAttribute('data-audience')); });
   });
 
-  // ── SEARCH ───────────────────────────────────────────
+  // ── Search ────────────────────────────────────────────────
   var searchInput = document.getElementById('search');
   var searchClear = document.getElementById('search-clear');
 
@@ -1164,36 +886,49 @@ Confirm when the file is saved.</pre>
     searchInput.focus();
   });
 
-  // ── INIT COUNTS ──────────────────────────────────────
-  updateAudienceCounts();
+  // ── Bootstrap — fetch registry.json ──────────────────────
+  fetch('registry.json')
+    .then(function(r) { return r.json(); })
+    .then(function(DATA) {
+      // render cards
+      DATA.forEach(function(item, idx) {
+        var card = buildCard(item, idx);
+        gridEl.appendChild(card);
+        allCards.push(card);
+      });
 
-  // ── TYPE COUNTS (static) ─────────────────────────────
-  document.getElementById('count-all').textContent  = DATA.length;
-  document.getElementById('count-mode').textContent = DATA.filter(function(d){ return d.type==='mode'; }).length;
-  document.getElementById('count-skill').textContent= DATA.filter(function(d){ return d.type==='skill'; }).length;
+      // update static counts
+      document.getElementById('hero-count').textContent   = DATA.length + ' entries';
+      document.getElementById('count-all').textContent    = DATA.length;
+      document.getElementById('count-mode').textContent   = DATA.filter(function(d) { return d.type === 'mode'; }).length;
+      document.getElementById('count-skill').textContent  = DATA.filter(function(d) { return d.type === 'skill'; }).length;
 
-  // ── URL PARAMS ───────────────────────────────────────
-  try {
-    var params = new URLSearchParams(window.location.search);
-
-    // ?q=pybob  — pre-fill search and filter on load
-    var qParam = params.get('q');
-    if (qParam) {
-      currentQuery = qParam.trim().toLowerCase();
-      searchInput.value = qParam.trim();
-      searchClear.classList.add('visible');
       updateAudienceCounts();
       applyFilters();
-    }
 
-    // ?return=…  — show back button
-    var returnUrl = params.get('return') || null;
-    if (returnUrl) {
-      var btn = document.getElementById('return-btn');
-      btn.href = returnUrl;
-      btn.classList.add('visible');
-    }
-  } catch(e) {}
+      // URL params
+      try {
+        var params   = new URLSearchParams(window.location.search);
+        var qParam   = params.get('q');
+        if (qParam) {
+          currentQuery = qParam.trim().toLowerCase();
+          searchInput.value = qParam.trim();
+          searchClear.classList.add('visible');
+          updateAudienceCounts();
+          applyFilters();
+        }
+        var returnUrl = params.get('return') || null;
+        if (returnUrl) {
+          var btn = document.getElementById('return-btn');
+          btn.href = returnUrl;
+          btn.classList.add('visible');
+        }
+      } catch(e) {}
+    })
+    .catch(function(err) {
+      console.error('Failed to load registry.json', err);
+      document.getElementById('hero-count').textContent = 'error loading';
+    });
 
 })();
 </script>

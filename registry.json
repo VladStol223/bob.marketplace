@@ -1,0 +1,191 @@
+[
+  {
+    "id": "qisbob",
+    "type": "mode",
+    "icon": "clock",
+    "file": "modes/QisBob.yaml",
+    "name": "QisBob — Quantum Mentor",
+    "tagline": "Socratic quantum computing tutor with Qiskit v2.0+ on real IBM hardware.",
+    "desc": "QisBob assesses your Python level, picks a learning track (Executive, Developer, or Hardware), and walks you gate by gate through Qiskit circuits — quizzing you at every step. Never lectures; always asks first.",
+    "audience": ["learner", "developer", "exec"],
+    "install_name": "QisBob Quantum Mentor"
+  },
+  {
+    "id": "pybob",
+    "type": "mode",
+    "icon": "swap",
+    "file": "modes/PyBob.yaml",
+    "name": "PyBob — Python Mentor",
+    "tagline": "Guided Python learning from zero to production-ready code.",
+    "desc": "PyBob acts as a patient Python tutor that meets you at your current level. It diagnoses gaps, runs mini-challenges, and builds up to real scripts — one concept at a time.",
+    "audience": ["learner", "developer"],
+    "install_name": "PyBob Python Mentor"
+  },
+  {
+    "id": "sqlbob",
+    "type": "mode",
+    "icon": "db",
+    "file": "modes/SqlBob.yaml",
+    "name": "SqlBob — Database Mentor",
+    "tagline": "Learn SQL from SELECT to advanced analytics, guided by a patient tutor.",
+    "desc": "SqlBob teaches database querying from scratch using real-world retail scenarios. It explains the WHY behind every clause, runs interactive challenges, and builds toward production-grade queries.",
+    "audience": ["learner", "developer", "data"],
+    "install_name": "SqlBob Database Mentor"
+  },
+  {
+    "id": "dataanalyst",
+    "type": "mode",
+    "icon": "bars",
+    "file": "modes/DataAnalyst.yaml",
+    "name": "DataAnalyst — Insights Mode",
+    "tagline": "Turns raw CSV or JSON data into structured analysis and plain-English summaries.",
+    "desc": "Drop any dataset into Bob and DataAnalyst takes over — cleaning, summarising, spotting anomalies, and generating chart-ready output. No statistics background required.",
+    "audience": ["data", "exec", "pm"],
+    "install_name": "DataAnalyst"
+  },
+  {
+    "id": "runbook",
+    "type": "mode",
+    "icon": "file",
+    "file": "modes/RunbookBob.yaml",
+    "name": "RunbookBob — Ops Documenter",
+    "tagline": "Converts incident logs and error traces into structured runbooks your team can actually follow.",
+    "desc": "Paste any error log, incident report, or system alert. RunbookBob diagnoses root cause, maps the blast radius, and writes a plain-English runbook with escalation paths — in minutes.",
+    "audience": ["devops", "developer"],
+    "install_name": "RunbookBob"
+  },
+  {
+    "id": "pitchcoach",
+    "type": "mode",
+    "icon": "chat",
+    "file": "modes/PitchCoach.yaml",
+    "name": "PitchCoach — Presentation Mode",
+    "tagline": "Stress-tests your ideas and builds executive-ready pitches from rough notes.",
+    "desc": "Describe your idea in plain English. PitchCoach challenges your assumptions with hard questions, identifies the weakest points, then structures a compelling 5-minute pitch with a clear ask.",
+    "audience": ["pm", "exec"],
+    "install_name": "PitchCoach"
+  },
+  {
+    "id": "refactorbob",
+    "type": "mode",
+    "icon": "refresh",
+    "file": "modes/RefactorBob.yaml",
+    "name": "RefactorBob — Code Review Mode",
+    "tagline": "Reviews any code for clarity, performance, and safety — then rewrites it cleanly.",
+    "desc": "Paste any function, file, or snippet. RefactorBob gives you a structured code review — naming, logic, edge cases, security — and produces a clean rewrite with change annotations.",
+    "audience": ["developer"],
+    "install_name": "RefactorBob"
+  },
+  {
+    "id": "productbob",
+    "type": "mode",
+    "icon": "monitor",
+    "file": "modes/ProductBob.yaml",
+    "name": "ProductBob — PM Assistant",
+    "tagline": "Turns vague feature requests into structured PRDs, user stories, and acceptance criteria.",
+    "desc": "Describe what you want to build in plain English. ProductBob asks clarifying questions, identifies edge cases, then produces a full PRD with user stories, acceptance criteria, and a prioritised backlog.",
+    "audience": ["pm", "developer"],
+    "install_name": "ProductBob"
+  },
+  {
+    "id": "securitybob",
+    "type": "mode",
+    "icon": "shield",
+    "file": "modes/SecurityBob.yaml",
+    "name": "SecurityBob — Threat Reviewer",
+    "tagline": "Audits code and system designs for vulnerabilities and produces a remediation plan.",
+    "desc": "Paste code, architecture diagrams, or config files. SecurityBob maps attack surface, identifies OWASP-class vulnerabilities, assigns severity, and outputs a prioritised fix list with remediation code.",
+    "audience": ["developer", "devops"],
+    "install_name": "SecurityBob"
+  },
+  {
+    "id": "xlsx",
+    "type": "skill",
+    "icon": "sheet",
+    "file": "skills/xlsx-insights.md",
+    "name": "xlsx-insights",
+    "tagline": "Analyse Excel workbooks — summaries, pivot logic, anomaly detection.",
+    "desc": "Give Bob any .xlsx file and this skill samples the workbook, writes a short Node script to compute the answer, runs it, and summarises the result — without loading the full file into context.",
+    "audience": ["data", "exec", "pm"]
+  },
+  {
+    "id": "diagram",
+    "type": "skill",
+    "icon": "grid",
+    "file": "skills/diagram-gen.md",
+    "name": "diagram-gen",
+    "tagline": "Generates Mermaid or D2 diagrams from plain-English descriptions.",
+    "desc": "Describe a system, process, or data flow in plain English. diagram-gen picks the right diagram type (flowchart, sequence, ER, C4), writes valid Mermaid syntax, and renders a preview inline.",
+    "audience": ["developer", "devops", "pm"]
+  },
+  {
+    "id": "pr",
+    "type": "skill",
+    "icon": "branch",
+    "file": "skills/create-pr.md",
+    "name": "create-pr",
+    "tagline": "Generates pull request descriptions from git diffs and opens the PR on GitHub.",
+    "desc": "Run this skill after committing your changes. Bob reads the diff, writes a structured PR description (what changed, why, how to test), lets you review it, then opens the PR directly on GitHub.",
+    "audience": ["developer"]
+  },
+  {
+    "id": "testgen",
+    "type": "skill",
+    "icon": "check",
+    "file": "skills/test-gen.md",
+    "name": "test-gen",
+    "tagline": "Writes unit and integration tests for any function or module you point it at.",
+    "desc": "Point test-gen at any file and it analyses the logic, identifies edge cases, and writes a full test suite in your project's framework (Jest, pytest, Go test, etc.) — ready to run immediately.",
+    "audience": ["developer"]
+  },
+  {
+    "id": "docwriter",
+    "type": "skill",
+    "icon": "edit",
+    "file": "skills/doc-writer.md",
+    "name": "doc-writer",
+    "tagline": "Generates README files, API docs, and inline comments from your codebase.",
+    "desc": "Point doc-writer at any file or folder. It reads the code structure, infers intent, and writes a full README, JSDoc/docstring comments, and a usage guide — all in your project's existing style.",
+    "audience": ["developer", "pm"]
+  },
+  {
+    "id": "envsetup",
+    "type": "skill",
+    "icon": "gear",
+    "file": "skills/env-setup.md",
+    "name": "env-setup",
+    "tagline": "Detects your OS and project type, then scaffolds a complete dev environment.",
+    "desc": "Tell Bob what you're building. env-setup detects your OS and package manager, installs dependencies, creates `.env` templates, sets up linting and formatting, and runs a smoke test — start to finish.",
+    "audience": ["developer", "learner"]
+  },
+  {
+    "id": "csvclean",
+    "type": "skill",
+    "icon": "list",
+    "file": "skills/csv-clean.md",
+    "name": "csv-clean",
+    "tagline": "Detects and fixes malformed CSV files — encoding, delimiters, nulls, duplicates.",
+    "desc": "Drop any CSV and csv-clean profiles it for encoding issues, inconsistent delimiters, null patterns, duplicates, and type mismatches — then writes a cleaned version and a diff report.",
+    "audience": ["data", "developer"]
+  },
+  {
+    "id": "apimock",
+    "type": "skill",
+    "icon": "swap2",
+    "file": "skills/api-mock.md",
+    "name": "api-mock",
+    "tagline": "Generates a working mock API server from an OpenAPI spec or plain description.",
+    "desc": "Paste an OpenAPI YAML or describe your endpoints in plain English. api-mock writes a runnable Express/FastAPI mock server with realistic fixture data, ready to use as a dev backend in minutes.",
+    "audience": ["developer", "devops"]
+  },
+  {
+    "id": "i18n",
+    "type": "skill",
+    "icon": "globe",
+    "file": "skills/i18n-extract.md",
+    "name": "i18n-extract",
+    "tagline": "Extracts hardcoded strings from a UI codebase and generates locale JSON files.",
+    "desc": "Point i18n-extract at any frontend codebase. It finds all hardcoded user-visible strings, replaces them with i18n keys, and writes a `en.json` locale file — ready to hand to a translator.",
+    "audience": ["developer"]
+  }
+]
