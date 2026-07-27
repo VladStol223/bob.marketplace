@@ -194,31 +194,31 @@
     padding-top: 24px; align-self: start;
     position: sticky; top: 76px;
   }
-  .search-wrap { position: relative; margin-bottom: 20px; }
-  .search-wrap svg {
+  .search-wrap { position: relative; margin-bottom: 20px; display: flex; align-items: center; }
+  .search-wrap .search-icon {
     position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
     color: var(--text-helper); pointer-events: none;
     transition: color var(--dur-moderate) var(--ease-standard);
   }
+  .search-wrap:has(#search:focus) .search-icon { color: var(--blue-hi); }
   #search {
-    width: 100%; background: var(--bg-layer-1);
+    flex: 1; background: var(--bg-layer-1);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary); font-family: var(--font-mono);
-    font-size: 0.82rem; padding: 9px 30px 9px 32px; outline: none;
+    font-size: 0.82rem; padding: 9px 36px 9px 32px; outline: none;
     transition: border-color var(--dur-moderate) var(--ease-standard), background var(--dur-moderate) var(--ease-standard);
   }
   #search::placeholder { color: var(--text-disabled); }
   #search:focus { border-color: var(--blue); background: var(--bg-layer-2); }
-  .search-wrap:has(#search:focus) svg { color: var(--blue-hi); }
   .search-clear {
-    position: absolute; right: 6px; top: 50%;
-    transform: translateY(-50%) scale(0.8);
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 34px;
+    display: none; align-items: center; justify-content: center;
     background: none; border: none; color: var(--text-helper);
-    cursor: pointer; padding: 4px;
-    display: none; opacity: 0;
-    transition: opacity var(--dur-fast) var(--ease-standard), color var(--dur-fast) var(--ease-standard);
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-standard);
   }
-  .search-clear.visible { display: flex; opacity: 1; }
+  .search-clear.visible { display: flex; }
   .search-clear:hover { color: var(--red); }
 
   /* ── NAV SECTIONS ── */
@@ -416,15 +416,14 @@
   .card-note svg { flex-shrink: 0; margin-top: 1px; color: var(--teal); }
   .card-note strong { color: var(--text-primary); }
 
-  /* ── DETAIL DRAWER (sits below the grid, outside it) ── */
+  /* ── DETAIL DRAWER (lives inside the grid, spans full row width) ── */
   .detail-drawer {
+    grid-column: 1 / -1;
     background: var(--bg-layer-2);
-    border: 1px solid var(--border-subtle);
     border-top: 2px solid var(--accent, var(--blue));
-    margin-top: 1px;
+    box-shadow: 1px 0 0 0 var(--border-subtle), 0 1px 0 0 var(--border-subtle);
     display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows var(--dur-expressive) var(--ease-standard),
-                border-color var(--dur-moderate) var(--ease-standard);
+    transition: grid-template-rows var(--dur-expressive) var(--ease-standard);
   }
   .detail-drawer.open { grid-template-rows: 1fr; }
   .detail-drawer-inner { overflow: hidden; }
@@ -541,8 +540,8 @@
   <!-- ── SIDEBAR ── -->
   <aside class="rail">
     <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="search" placeholder="filter entries…" autocomplete="off" spellcheck="false" />
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search" placeholder="search…" autocomplete="off" spellcheck="false" />
       <button class="search-clear" id="search-clear" type="button" aria-label="Clear search">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -576,11 +575,6 @@
       <span id="results-filter"></span>
     </div>
     <div class="grid" id="grid"></div>
-    <div class="detail-drawer" id="detail-drawer">
-      <div class="detail-drawer-inner">
-        <div class="detail-drawer-pad" id="detail-drawer-pad"></div>
-      </div>
-    </div>
     <div class="empty-state" id="empty-state">
       No entries match <strong id="empty-query"></strong>. Try a different search or filter.
     </div>
@@ -881,9 +875,14 @@ Confirm when the file is saved.</pre>
 
   // ── DOM refs ──────────────────────────────────────────
   var gridEl         = document.getElementById('grid');
-  var drawerEl       = document.getElementById('detail-drawer');
-  var drawerPadEl    = document.getElementById('detail-drawer-pad');
   var emptyEl        = document.getElementById('empty-state');
+
+  // build drawer once — it gets moved inside the grid on each open
+  var drawerEl  = document.createElement('div');
+  drawerEl.className = 'detail-drawer';
+  drawerEl.id = 'detail-drawer';
+  drawerEl.innerHTML = '<div class="detail-drawer-inner"><div class="detail-drawer-pad" id="detail-drawer-pad"></div></div>';
+  var drawerPadEl; // assigned after first insert
   var emptyQueryEl   = document.getElementById('empty-query');
   var resultsCountEl = document.getElementById('results-count');
   var resultsFilterEl= document.getElementById('results-filter');
@@ -961,7 +960,24 @@ Confirm when the file is saved.</pre>
     card._open = true;
     card.classList.add('card--open');
 
-    // populate drawer with this card's detail
+    // find the last card in the same visual row as the clicked card
+    var clickedTop = card.getBoundingClientRect().top;
+    var visibleCards = allCards.filter(function(c) { return !c.classList.contains('hidden-card'); });
+    var lastInRow = card;
+    for (var i = 0; i < visibleCards.length; i++) {
+      var c = visibleCards[i];
+      if (Math.abs(c.getBoundingClientRect().top - clickedTop) < 4) {
+        lastInRow = c;
+      }
+    }
+
+    // move drawer into grid right after the last card in that row
+    // temporarily close so re-insertion doesn't animate weirdly
+    drawerEl.classList.remove('open');
+    lastInRow.after(drawerEl);
+    drawerPadEl = document.getElementById('detail-drawer-pad');
+
+    // populate content
     var item = card._item;
     var promptText = card._promptText;
     drawerEl.style.setProperty('--accent', accentVar(item.type));
@@ -977,7 +993,14 @@ Confirm when the file is saved.</pre>
         '</div>' +
         '<div class="terminal-body"><pre>' + escapeHtml(promptText) + '<span class="cursor" aria-hidden="true"></span></pre></div>' +
       '</div>';
-    drawerEl.classList.add('open');
+
+    // small delay so the browser registers the re-insert before animating open
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        drawerEl.classList.add('open');
+        drawerEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
   }
 
   function closeDrawer() {
