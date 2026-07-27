@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Bob Marketplace — Modes &amp; Skills</title>
+<meta name="description" content="Browse and install Bob modes and skills. Modes change how Bob thinks; skills change what it can do. One-click install prompts for every entry." />
+<meta property="og:title" content="Bob Marketplace — Modes &amp; Skills" />
+<meta property="og:description" content="Browse and install Bob modes and skills. Modes change how Bob thinks; skills change what it can do." />
+<meta property="og:url" content="https://vladstol223.github.io/bob.marketplace/" />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='3' y='3' width='8' height='8' fill='%23a56eff'/><rect x='13' y='3' width='8' height='8' fill='%23a56eff'/><rect x='3' y='13' width='8' height='8' fill='%23a56eff'/><rect x='13' y='13' width='8' height='8' fill='%23a56eff'/></svg>" />
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GSNL2N0DW9"></script>
 <script>
@@ -52,6 +58,7 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
   }
@@ -70,6 +77,7 @@
 
   .ambient {
     position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+    will-change: transform; contain: layout paint;
   }
   .ambient::before, .ambient::after {
     content: '';
@@ -278,7 +286,7 @@
     background: var(--border-subtle);
     border: 1px solid var(--border-subtle);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .card {
@@ -393,6 +401,9 @@
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0,0,0,0.18);
     transition: opacity 0.6s ease;
+  }
+  @media (max-width: 480px) {
+    .card-note { right: auto; left: 0; max-width: calc(100vw - 48px); }
   }
   .card-note.visible { opacity: 1; display: flex; }
   .card-note.fading { opacity: 0; }
@@ -539,6 +550,7 @@
       border-radius: 0;
       border-left: none;
       border-right: none;
+      overflow: visible;
     }
     .results-bar { font-size: 11px; }
   }
@@ -559,7 +571,7 @@
     bob<span class="crumb">/marketplace</span>
   </a>
   <div class="header-right">
-    <a class="return-btn" id="return-btn" href="#">
+    <a class="return-btn" id="return-btn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
       back
     </a>
@@ -584,28 +596,28 @@
   <aside class="rail">
     <div class="search-wrap">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="search" placeholder="search…" autocomplete="off" spellcheck="false" />
+      <input type="text" id="search" placeholder="search…" autocomplete="off" spellcheck="false" aria-label="Search modes and skills" />
       <button class="search-clear" id="search-clear" type="button" aria-label="Clear search">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
     <div class="nav-section-label">Type</div>
-    <ul class="nav-list" id="type-nav" role="tablist">
-      <li><button class="nav-item active" data-type="all" role="tab" aria-selected="true">all <span class="count" id="count-all">–</span></button></li>
-      <li><button class="nav-item" data-type="mode" role="tab" aria-selected="false">modes <span class="count" id="count-mode">–</span></button></li>
-      <li><button class="nav-item" data-type="skill" role="tab" aria-selected="false">skills <span class="count" id="count-skill">–</span></button></li>
+    <ul class="nav-list" id="type-nav" role="listbox" aria-label="Filter by type">
+      <li><button class="nav-item active" data-type="all" role="option" aria-selected="true">all <span class="count" id="count-all">–</span></button></li>
+      <li><button class="nav-item" data-type="mode" role="option" aria-selected="false">modes <span class="count" id="count-mode">–</span></button></li>
+      <li><button class="nav-item" data-type="skill" role="option" aria-selected="false">skills <span class="count" id="count-skill">–</span></button></li>
     </ul>
 
     <div class="nav-section-label" style="margin-top:16px">Audience</div>
-    <ul class="nav-list" id="audience-nav" role="tablist">
-      <li><button class="nav-item audience-item active" data-audience="all" role="tab" aria-selected="true">everyone <span class="count" id="count-aud-all">–</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="developer" role="tab" aria-selected="false">developer <span class="count" id="count-aud-developer">0</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="data" role="tab" aria-selected="false">data analyst <span class="count" id="count-aud-data">0</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="devops" role="tab" aria-selected="false">devops <span class="count" id="count-aud-devops">0</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="pm" role="tab" aria-selected="false">product / PM <span class="count" id="count-aud-pm">0</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="exec" role="tab" aria-selected="false">exec / non-tech <span class="count" id="count-aud-exec">0</span></button></li>
-      <li><button class="nav-item audience-item" data-audience="learner" role="tab" aria-selected="false">learner <span class="count" id="count-aud-learner">0</span></button></li>
+    <ul class="nav-list" id="audience-nav" role="listbox" aria-label="Filter by audience">
+      <li><button class="nav-item audience-item active" data-audience="all" role="option" aria-selected="true">everyone <span class="count" id="count-aud-all">–</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="developer" role="option" aria-selected="false">developer <span class="count" id="count-aud-developer">0</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="data" role="option" aria-selected="false">data analyst <span class="count" id="count-aud-data">0</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="devops" role="option" aria-selected="false">devops <span class="count" id="count-aud-devops">0</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="pm" role="option" aria-selected="false">product / PM <span class="count" id="count-aud-pm">0</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="exec" role="option" aria-selected="false">exec / non-tech <span class="count" id="count-aud-exec">0</span></button></li>
+      <li><button class="nav-item audience-item" data-audience="learner" role="option" aria-selected="false">learner <span class="count" id="count-aud-learner">0</span></button></li>
     </ul>
 
     <div class="rail-note">Installing writes to <code>.bob/custom_modes.yaml</code> or <code>.bob/skills/</code> in your workspace.</div>
@@ -986,7 +998,10 @@
   });
 
   // ── Bootstrap — fetch registry.json ──────────────────────
-  fetch('registry.json')
+  var registryUrl = (window.location.protocol === 'file:')
+    ? 'https://vladstol223.github.io/bob.marketplace/registry.json'
+    : 'registry.json';
+  fetch(registryUrl)
     .then(function(r) { return r.json(); })
     .then(function(DATA) {
       // render cards
@@ -1019,7 +1034,7 @@
         var returnUrl = params.get('return') || null;
         if (returnUrl) {
           var btn = document.getElementById('return-btn');
-          btn.href = returnUrl;
+          btn.setAttribute('href', returnUrl);
           btn.classList.add('visible');
         }
       } catch(e) {}
