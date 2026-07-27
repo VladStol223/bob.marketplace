@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bob Marketplace — Modes &amp; Skills</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GSNL2N0DW9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GSNL2N0DW9');
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #111318;
+    --surface:   #1c1f26;
+    --surface2:  #242830;
+    --border:    #2e3140;
+    --text:      #e2e6f0;
+    --muted:     #8b92a8;
+    --radius:    14px;
+    --ibm-blue:  #0F62FE;
+    --mode-col:  #7c3aed;
+    --skill-col: #0057B8;
+    --ease:      cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(17,19,24,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-logo svg { flex-shrink: 0; }
+  .header-logo span { color: var(--muted); font-weight: 400; }
+  .return-btn {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .return-btn:hover { background: var(--surface2); border-color: #4a5070; }
+  .return-btn svg { flex-shrink: 0; }
+  .return-btn.visible { display: flex; }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 32px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .hero p {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 28px;
+  }
+
+  /* ── TAB BAR ── */
+  .tab-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 24px 40px;
+  }
+  .tab-btn {
+    padding: 9px 22px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); border-color: #4a5070; }
+  .tab-btn.active.modes  { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); color: #b49dfa; }
+  .tab-btn.active.skills { background: rgba(0,87,184,0.15);  border-color: rgba(0,87,184,0.5);  color: #7db3f5; }
+
+  /* ── GRID ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .grid {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+  }
+  .card:hover { border-color: #4a5070; }
+  .card.modes-card  { border-top: 3px solid var(--mode-col); }
+  .card.skills-card { border-top: 3px solid var(--skill-col); }
+
+  .card-header {
+    padding: 18px 18px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .modes-card  .card-icon { background: rgba(124,58,237,0.18); color: #b49dfa; }
+  .skills-card .card-icon { background: rgba(0,87,184,0.18);  color: #7db3f5; }
+
+  .card-meta { flex: 1; min-width: 0; }
+  .card-type {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .modes-card  .card-type { color: #b49dfa; }
+  .skills-card .card-type { color: #7db3f5; }
+
+  .card-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .card-tagline {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card-chevron {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--muted);
+    transition: transform 0.25s var(--ease);
+    margin-top: 2px;
+  }
+  .card.open .card-chevron { transform: rotate(180deg); }
+
+  /* ── CARD BODY ── */
+  .card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease);
+  }
+  .card.open .card-body { max-height: 600px; }
+  .card-body-inner {
+    padding: 0 18px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+    padding-top: 14px;
+    margin-bottom: 16px;
+  }
+
+  /* ── PROMPT BOX ── */
+  .prompt-box {
+    background: #0d111a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .prompt-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 9px 12px 7px;
+    border-bottom: 1px solid var(--border);
+  }
+  .prompt-box pre {
+    font-family: 'Menlo', 'Consolas', monospace;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #b8c8e8;
+    padding: 12px 44px 12px 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+  }
+  .prompt-wrapper { position: relative; }
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.16); }
+  .copy-btn.copied { color: #5ec98a; border-color: rgba(94,201,138,0.4); }
+
+  /* ── RETURN HINT ── */
+  .return-hint {
+    display: none;
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: rgba(15,98,254,0.08);
+    border: 1px solid rgba(15,98,254,0.25);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #7db3f5;
+    line-height: 1.5;
+  }
+  .return-hint.visible { display: block; }
+  .return-hint a {
+    color: #93c5fd;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <a class="header-logo" href="#">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F62FE" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+    Bob Marketplace <span>/ Modes &amp; Skills</span>
+  </a>
+  <a class="return-btn" id="return-btn" href="#">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    Return to lab
+  </a>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">IBM Bob</div>
+  <h1>Modes &amp; Skills Marketplace</h1>
+  <p>Extend Bob with custom modes that change how it thinks, and skills that change what it can do. Pick one, paste the install prompt, and you're live in under a minute.</p>
+</div>
+
+<!-- ── TABS ── -->
+<div class="tab-bar">
+  <button class="tab-btn active modes" data-tab="modes">Modes</button>
+  <button class="tab-btn skills" data-tab="skills">Skills</button>
+</div>
+
+<!-- ══════════ MODES SECTION ══════════ -->
+<section class="section active" id="section-modes">
+  <div class="grid" id="modes-grid">
+
+    <!-- CARD TEMPLATE — repeated 9× with different content -->
+
+    <div class="card modes-card" id="mode-qisbob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">QisBob — Quantum Mentor</div>
+          <div class="card-tagline">Socratic quantum computing tutor with Qiskit v2.0+ on real IBM hardware.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">QisBob assesses your Python level, picks a learning track (Executive, Developer, or Hardware), and walks you gate by gate through Qiskit circuits — quizzing you at every step. Never lectures; always asks first.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/wd.bob/QisBob.yaml and save it as `QisBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content QisBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' QisBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "QisBob Quantum Mentor" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="QisBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-qisbob"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-pybob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">PyBob — Python Mentor</div>
+          <div class="card-tagline">Guided Python learning from zero to production-ready code.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">PyBob acts as a patient Python tutor that meets you at your current level. It diagnoses gaps, runs mini-challenges, and builds up to real scripts — one concept at a time.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/wd.bob/PyBob.yaml and save it as `PyBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content PyBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' PyBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "PyBob Python Mentor" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="PyBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-pybob"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-sqlbob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">SqlBob — Database Mentor</div>
+          <div class="card-tagline">Learn SQL from SELECT to advanced analytics, guided by a patient tutor.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">SqlBob teaches database querying from scratch using real-world retail scenarios. It explains the WHY behind every clause, runs interactive challenges, and builds toward production-grade queries.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/wd.bob/SqlBob.yaml and save it as `SqlBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content SqlBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' SqlBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "SqlBob Database Mentor" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="SqlBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-sqlbob"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-dataanalyst">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">DataAnalyst — Insights Mode</div>
+          <div class="card-tagline">Turns raw CSV or JSON data into structured analysis and plain-English summaries.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Drop any dataset into Bob and DataAnalyst takes over — cleaning, summarising, spotting anomalies, and generating chart-ready output. No statistics background required.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/DataAnalyst.yaml and save it as `DataAnalyst.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content DataAnalyst.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' DataAnalyst.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "DataAnalyst" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="DataAnalyst">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-dataanalyst"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-runbook">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">RunbookBob — Ops Documenter</div>
+          <div class="card-tagline">Converts incident logs and error traces into structured runbooks your team can actually follow.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Paste any error log, incident report, or system alert. RunbookBob diagnoses root cause, maps the blast radius, and writes a plain-English runbook with escalation paths — in minutes.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/RunbookBob.yaml and save it as `RunbookBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content RunbookBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' RunbookBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "RunbookBob" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="RunbookBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-runbook"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-pitchcoach">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">PitchCoach — Presentation Mode</div>
+          <div class="card-tagline">Stress-tests your ideas and builds executive-ready pitches from rough notes.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Describe your idea in plain English. PitchCoach challenges your assumptions with hard questions, identifies the weakest points, then structures a compelling 5-minute pitch with a clear ask.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/PitchCoach.yaml and save it as `PitchCoach.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content PitchCoach.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' PitchCoach.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "PitchCoach" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="PitchCoach">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-pitchcoach"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-refactorbob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">RefactorBob — Code Review Mode</div>
+          <div class="card-tagline">Reviews any code for clarity, performance, and safety — then rewrites it cleanly.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Paste any function, file, or snippet. RefactorBob gives you a structured code review — naming, logic, edge cases, security — and produces a clean rewrite with change annotations.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/RefactorBob.yaml and save it as `RefactorBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content RefactorBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' RefactorBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "RefactorBob" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="RefactorBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-refactorbob"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-productbob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">ProductBob — PM Assistant</div>
+          <div class="card-tagline">Turns vague feature requests into structured PRDs, user stories, and acceptance criteria.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Describe what you want to build in plain English. ProductBob asks clarifying questions, identifies edge cases, then produces a full PRD with user stories, acceptance criteria, and a prioritised backlog.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/ProductBob.yaml and save it as `ProductBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content ProductBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' ProductBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "ProductBob" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="ProductBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-productbob"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card modes-card" id="mode-securitybob">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Mode</div>
+          <div class="card-name">SecurityBob — Threat Reviewer</div>
+          <div class="card-tagline">Audits code and system designs for vulnerabilities and produces a remediation plan.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Paste code, architecture diagrams, or config files. SecurityBob maps attack surface, identifies OWASP-class vulnerabilities, assigns severity, and outputs a prioritised fix list with remediation code.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/SecurityBob.yaml and save it as `SecurityBob.yaml` in my workspace folder.
+
+Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:
+
+- Windows (PowerShell):
+  $lines = Get-Content SecurityBob.yaml -Encoding UTF8
+  $fixed = $lines | ForEach-Object { if ($_ -match '^\s') { $_ -replace '^  ', '' } else { $_ } }
+  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })
+  New-Item -ItemType Directory -Force -Path .bob | Out-Null
+  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8
+
+- macOS / Linux:
+  mkdir -p .bob && printf 'customModes:\n' > .bob/custom_modes.yaml && sed 's/^  //' SecurityBob.yaml | sed 's/^/  /' >> .bob/custom_modes.yaml
+
+Confirm when done and tell me to switch to "SecurityBob" in the Bob mode picker.</pre>
+              <button class="copy-btn" data-item="SecurityBob">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-mode-securitybob"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end modes grid -->
+</section>
+
+<!-- ══════════ SKILLS SECTION ══════════ -->
+<section class="section" id="section-skills">
+  <div class="grid" id="skills-grid">
+
+    <div class="card skills-card" id="skill-xlsx">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">xlsx-insights</div>
+          <div class="card-tagline">Analyse Excel workbooks — summaries, pivot logic, anomaly detection.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Give Bob any .xlsx file and this skill samples the workbook, writes a short Node script to compute the answer, runs it, and summarises the result — without loading the full file into context.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/xlsx-insights.md and save it as `.bob/skills/xlsx-insights.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="xlsx-insights">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-xlsx"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-diagram">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="9" y="15" width="6" height="6"/><path d="M6 9v3h12V9M12 12v3"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">diagram-gen</div>
+          <div class="card-tagline">Generates Mermaid or D2 diagrams from plain-English descriptions.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Describe a system, process, or data flow in plain English. diagram-gen picks the right diagram type (flowchart, sequence, ER, C4), writes valid Mermaid syntax, and renders a preview inline.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/diagram-gen.md and save it as `.bob/skills/diagram-gen.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="diagram-gen">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-diagram"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-pr">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">create-pr</div>
+          <div class="card-tagline">Generates pull request descriptions from git diffs and opens the PR on GitHub.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Run this skill after committing your changes. Bob reads the diff, writes a structured PR description (what changed, why, how to test), lets you review it, then opens the PR directly on GitHub.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/create-pr.md and save it as `.bob/skills/create-pr.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="create-pr">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-pr"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-testgen">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">test-gen</div>
+          <div class="card-tagline">Writes unit and integration tests for any function or module you point it at.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Point test-gen at any file and it analyses the logic, identifies edge cases, and writes a full test suite in your project's framework (Jest, pytest, Go test, etc.) — ready to run immediately.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/test-gen.md and save it as `.bob/skills/test-gen.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="test-gen">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-testgen"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-docwriter">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">doc-writer</div>
+          <div class="card-tagline">Generates README files, API docs, and inline comments from your codebase.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Point doc-writer at any file or folder. It reads the code structure, infers intent, and writes a full README, JSDoc/docstring comments, and a usage guide — all in your project's existing style.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/doc-writer.md and save it as `.bob/skills/doc-writer.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="doc-writer">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-docwriter"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-envsetup">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 0 4.93 19.07M4.93 4.93A10 10 0 0 0 19.07 19.07"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">env-setup</div>
+          <div class="card-tagline">Detects your OS and project type, then scaffolds a complete dev environment.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Tell Bob what you're building. env-setup detects your OS and package manager, installs dependencies, creates `.env` templates, sets up linting and formatting, and runs a smoke test — start to finish.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/env-setup.md and save it as `.bob/skills/env-setup.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="env-setup">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-envsetup"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-csvclean">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">csv-clean</div>
+          <div class="card-tagline">Detects and fixes malformed CSV files — encoding, delimiters, nulls, duplicates.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Drop any CSV and csv-clean profiles it for encoding issues, inconsistent delimiters, null patterns, duplicates, and type mismatches — then writes a cleaned version and a diff report.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/csv-clean.md and save it as `.bob/skills/csv-clean.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="csv-clean">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-csvclean"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-apimock">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h7"/><path d="M15 15l5 5m-5 0l5-5"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">api-mock</div>
+          <div class="card-tagline">Generates a working mock API server from an OpenAPI spec or plain description.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Paste an OpenAPI YAML or describe your endpoints in plain English. api-mock writes a runnable Express/FastAPI mock server with realistic fixture data, ready to use as a dev backend in minutes.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/api-mock.md and save it as `.bob/skills/api-mock.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="api-mock">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-apimock"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card skills-card" id="skill-i18n">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="card-meta">
+          <div class="card-type">Skill</div>
+          <div class="card-name">i18n-extract</div>
+          <div class="card-tagline">Extracts hardcoded strings from a UI codebase and generates locale JSON files.</div>
+        </div>
+        <svg class="card-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="card-body-inner">
+          <p class="card-desc">Point i18n-extract at any frontend codebase. It finds all hardcoded user-visible strings, replaces them with i18n keys, and writes a `en.json` locale file — ready to hand to a translator.</p>
+          <div class="prompt-box">
+            <div class="prompt-label">Install prompt — paste into Bob</div>
+            <div class="prompt-wrapper">
+              <pre>Download the file at https://vladstol223.github.io/bob-marketplace/skills/i18n-extract.md and save it as `.bob/skills/i18n-extract.md` in my workspace folder. Create the directory if it doesn't exist.
+
+Confirm when the file is saved.</pre>
+              <button class="copy-btn" data-item="i18n-extract">Copy</button>
+            </div>
+          </div>
+          <div class="return-hint" id="hint-skill-i18n"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end skills grid -->
+</section>
+
+<script>
+(function() {
+
+  // ── RETURN PARAM ──────────────────────────────────────
+  var returnUrl = null;
+  try {
+    var params = new URLSearchParams(window.location.search);
+    returnUrl = params.get('return') || null;
+  } catch(e) {}
+
+  if (returnUrl) {
+    var btn = document.getElementById('return-btn');
+    btn.href = returnUrl;
+    btn.classList.add('visible');
+    // Show a return hint inside every open card
+    document.querySelectorAll('.return-hint').forEach(function(el) {
+      el.innerHTML = 'After installing, <a href="' + returnUrl + '">return to your lab \u2192</a> and continue from where you left off.';
+      el.classList.add('visible');
+    });
+  }
+
+  // ── TABS ──────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tab = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.classList.remove('active', 'modes', 'skills');
+      });
+      btn.classList.add('active', tab);
+      document.querySelectorAll('.section').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      document.getElementById('section-' + tab).classList.add('active');
+      gtag('event', 'tab_switch', { tab: tab });
+    });
+  });
+
+  // ── CARD TOGGLE ───────────────────────────────────────
+  document.querySelectorAll('.card-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      var card = header.closest('.card');
+      var isOpen = card.classList.contains('open');
+      // close all
+      document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('open'); });
+      if (!isOpen) {
+        card.classList.add('open');
+        gtag('event', 'item_open', { item_id: card.id });
+        setTimeout(function() {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 80);
+      }
+    });
+  });
+
+  // ── COPY BUTTONS ─────────────────────────────────────
+  document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('copy-btn')) return;
+    var btn = e.target;
+    var pre = btn.closest('.prompt-wrapper').querySelector('pre');
+    if (!pre) return;
+    var text = pre.textContent;
+    var itemName = btn.getAttribute('data-item') || 'unknown';
+
+    function done() {
+      btn.textContent = '\u2713 Copied!';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+      gtag('event', 'install_copy', { item: itemName });
+    }
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(done).catch(function() {
+        fallback(text); done();
+      });
+    } else {
+      fallback(text); done();
+    }
+  });
+
+  function fallback(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+})();
+</script>
+
+</body>
+</html>
