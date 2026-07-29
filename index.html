@@ -621,7 +621,7 @@
       <li><button class="nav-item audience-item" data-audience="learner" role="option" aria-selected="false">learner <span class="count" id="count-aud-learner">0</span></button></li>
     </ul>
 
-    <div class="rail-note">Modes install to <code>~\.bob\settings\custom_modes.yaml</code> (Windows) or <code>~/.bob/settings/custom_modes.yaml</code> (macOS/Linux). Skills install to <code>.bob/skills/</code> in your workspace.</div>
+    <div class="rail-note">Modes install to <code>~\.bob\settings\custom_modes.yaml</code> (Windows) or <code>~/.bob/settings/custom_modes.yaml</code> (macOS/Linux). Skills install to <code>~\.bob\skills\</code> globally.</div>
   </aside>
 
   <main class="main-col">
@@ -699,8 +699,9 @@
         '  rm ' + filename + '\n\n' +
         'Confirm when done. To activate the mode, open the Bob mode picker and select "' + item.install_name + '".';
     } else {
-      var dest = '.bob/skills/' + filename;
-      return 'Download the file at ' + fileUrl + ' and save it as `' + dest + '` in my workspace folder. Create the directory if it doesn\'t exist.\n\nConfirm when the file is saved.';
+      var skillName = filename.replace(/\.md$/i, '');
+      var dest = '$HOME\\.bob\\skills\\' + skillName + '\\SKILL.md';
+      return 'Download the file at ' + fileUrl + ' and save it as `' + dest + '` (create the directory if it doesn\'t exist).\n\nConfirm when the file is saved.';
     }
   }
 
