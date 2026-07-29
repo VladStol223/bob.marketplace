@@ -621,7 +621,7 @@
       <li><button class="nav-item audience-item" data-audience="learner" role="option" aria-selected="false">learner <span class="count" id="count-aud-learner">0</span></button></li>
     </ul>
 
-    <div class="rail-note">Installing writes to <code>.bob/custom_modes.yaml</code> or <code>.bob/skills/</code> in your workspace.</div>
+    <div class="rail-note">Modes install to <code>~\.bob\settings\custom_modes.yaml</code> (Windows) or <code>~/.bob/settings/custom_modes.yaml</code> (macOS/Linux). Skills install to <code>.bob/skills/</code> in your workspace.</div>
   </aside>
 
   <main class="main-col">
@@ -678,20 +678,24 @@
     var filename = item.file.split('/').pop();
 
     if (item.type === 'mode') {
-      return 'Download the file at ' + fileUrl + ' and save it temporarily as `' + filename + '` in my workspace folder.\n\n' +
-        'Then run the appropriate command to append it to `.bob/custom_modes.yaml`:\n\n' +
+      return 'Download the file at ' + fileUrl + ' and save it temporarily as `' + filename + '` in the current directory.\n\n' +
+        'Then run the appropriate command to append it to the user-level custom modes file:\n\n' +
         '- Windows (PowerShell):\n' +
-        '  $lines = Get-Content ' + filename + ' -Encoding UTF8\n' +
+        '  $dest = "$HOME\\.bob\\settings\\custom_modes.yaml"\n' +
+        '  $crlf = [char]13 + [char]10\n' +
+        '  $raw = [System.IO.File]::ReadAllText("' + filename + '", [System.Text.Encoding]::UTF8)\n' +
+        '  $raw = $raw.Replace([string]$crlf, [string][char]10).Replace([string][char]13, [string][char]10)\n' +
+        '  $lines = $raw -split [string][char]10\n' +
         '  $fixed = $lines | ForEach-Object { if ($_ -match \'^\\s\') { $_ -replace \'^  \', \'\' } else { $_ } }\n' +
         '  $entry = $fixed | ForEach-Object { "  $_" }\n' +
-        '  New-Item -ItemType Directory -Force -Path .bob | Out-Null\n' +
-        '  $dest = \'.bob/custom_modes.yaml\'\n' +
-        '  if (-not (Test-Path $dest)) { @("customModes:") + $entry | Set-Content $dest -Encoding UTF8 } else { $entry | Add-Content $dest -Encoding UTF8 }\n' +
+        '  New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null\n' +
+        '  if (-not (Test-Path $dest)) { $newContent = "customModes:" + $crlf + ($entry -join $crlf) + $crlf } else { $existing = [System.IO.File]::ReadAllText($dest, [System.Text.Encoding]::UTF8); $newContent = $existing.TrimEnd() + $crlf + ($entry -join $crlf) + $crlf }\n' +
+        '  [System.IO.File]::WriteAllText($dest, $newContent, [System.Text.Encoding]::UTF8)\n' +
         '  Remove-Item ' + filename + '\n\n' +
         '- macOS / Linux:\n' +
-        '  mkdir -p .bob\n' +
-        '  [ -f .bob/custom_modes.yaml ] || printf \'customModes:\\n\' > .bob/custom_modes.yaml\n' +
-        '  sed \'s/^  //\' ' + filename + ' | sed \'s/^/  /\' >> .bob/custom_modes.yaml\n' +
+        '  mkdir -p ~/.bob/settings\n' +
+        '  [ -f ~/.bob/settings/custom_modes.yaml ] || printf \'customModes:\\n\' > ~/.bob/settings/custom_modes.yaml\n' +
+        '  sed \'s/^  //\' ' + filename + ' | sed \'s/^/  /\' >> ~/.bob/settings/custom_modes.yaml\n' +
         '  rm ' + filename + '\n\n' +
         'Confirm when done. To activate the mode, open the Bob mode picker and select "' + item.install_name + '".';
     } else {
