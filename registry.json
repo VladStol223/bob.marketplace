@@ -1,4 +1,15 @@
-﻿[
+[
+  {
+    "id": "jenny-language-mentor",
+    "type": "mode",
+    "icon": "chat",
+    "file": "modes/jenny-language-mentor.yaml",
+    "name": "Jenny — Language Mentor",
+    "tagline": "Retention-engineered language tutor for Spanish, French, German, Russian, Mandarin, Arabic, Portuguese, and Khmer.",
+    "desc": "Jenny is a structured language learning system, not a chatbot. She runs a 7-phase loop — diagnostic intake, curriculum architecture, Socratic teaching, blind assessment, session close, FSRS flashcard export, and an amnesty return protocol — to build durable fluency across 8 languages.",
+    "audience": ["learner", "exec"],
+    "install_name": "Jenny the Language Mentor"
+  },
   {
     "id": "qisbob-quantum-mentor",
     "type": "mode",

@@ -678,17 +678,22 @@
     var filename = item.file.split('/').pop();
 
     if (item.type === 'mode') {
-      return 'Download the file at ' + fileUrl + ' and save it as `' + filename + '` in my workspace folder.\n\n' +
-        'Then install it as a custom Bob mode by writing it to `.bob/custom_modes.yaml`:\n\n' +
+      return 'Download the file at ' + fileUrl + ' and save it temporarily as `' + filename + '` in my workspace folder.\n\n' +
+        'Then run the appropriate command to append it to `.bob/custom_modes.yaml`:\n\n' +
         '- Windows (PowerShell):\n' +
         '  $lines = Get-Content ' + filename + ' -Encoding UTF8\n' +
         '  $fixed = $lines | ForEach-Object { if ($_ -match \'^\\s\') { $_ -replace \'^  \', \'\' } else { $_ } }\n' +
-        '  $out = @("customModes:") + ($fixed | ForEach-Object { "  $_" })\n' +
+        '  $entry = $fixed | ForEach-Object { "  $_" }\n' +
         '  New-Item -ItemType Directory -Force -Path .bob | Out-Null\n' +
-        '  $out | Set-Content .bob/custom_modes.yaml -Encoding UTF8\n\n' +
+        '  $dest = \'.bob/custom_modes.yaml\'\n' +
+        '  if (-not (Test-Path $dest)) { @("customModes:") + $entry | Set-Content $dest -Encoding UTF8 } else { $entry | Add-Content $dest -Encoding UTF8 }\n' +
+        '  Remove-Item ' + filename + '\n\n' +
         '- macOS / Linux:\n' +
-        '  mkdir -p .bob && printf \'customModes:\\n\' > .bob/custom_modes.yaml && sed \'s/^  //\' ' + filename + ' | sed \'s/^/  /\' >> .bob/custom_modes.yaml\n\n' +
-        'Confirm when done and tell me to switch to "' + item.install_name + '" in the Bob mode picker.';
+        '  mkdir -p .bob\n' +
+        '  [ -f .bob/custom_modes.yaml ] || printf \'customModes:\\n\' > .bob/custom_modes.yaml\n' +
+        '  sed \'s/^  //\' ' + filename + ' | sed \'s/^/  /\' >> .bob/custom_modes.yaml\n' +
+        '  rm ' + filename + '\n\n' +
+        'Confirm when done. To activate the mode, open the Bob mode picker and select "' + item.install_name + '".';
     } else {
       var dest = '.bob/skills/' + filename;
       return 'Download the file at ' + fileUrl + ' and save it as `' + dest + '` in my workspace folder. Create the directory if it doesn\'t exist.\n\nConfirm when the file is saved.';
