@@ -512,5 +512,206 @@
     "tagline": "Force normal, human-designed UI — escape the AI aesthetic of gradients and glass.",
     "desc": "Strict ruleset that prevents 'Codex UI': no oversized rounded corners, no soft gradients, no floating glassmorphism, no dramatic shadows. Pushes toward interfaces that look like they were designed by a human.",
     "audience": ["developer", "pm"]
+  },
+  {
+    "id": "engineering-audit",
+    "type": "skill",
+    "icon": "check",
+    "file": "skills/engineering-audit.md",
+    "name": "engineering-audit",
+    "tagline": "Structured software engineering audit and release readiness review for codebases.",
+    "desc": "Runs a staged engineering audit: repository discovery, technical findings, product decision gates, remediation, independent verification, validation, user journey review, beta triage, and final release reporting.",
+    "audience": ["developer", "pm"]
+  },
+  {
+    "id": "python-3-12",
+    "type": "installer",
+    "icon": "gear",
+    "name": "Python 3.12",
+    "tagline": "Install Python for scripts, tooling, virtualenvs, and local app development.",
+    "desc": "Installs Python 3.12 and verifies that Python and pip are available on PATH.",
+    "audience": ["developer", "data"],
+    "guided": false,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id Python.Python.3.12 -e --source winget"
+      },
+      "macos": {
+        "preferred": "brew",
+        "command": "brew install python@3.12"
+      },
+      "linux": {
+        "preferred": "apt",
+        "command": "sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-venv"
+      }
+    },
+    "verify": ["python --version", "pip --version"],
+    "requires_admin": false,
+    "requires_restart": false
+  },
+  {
+    "id": "nodejs-lts",
+    "type": "installer",
+    "icon": "gear",
+    "name": "Node.js LTS",
+    "tagline": "Install Node.js and npm for frontend builds, CLIs, and JavaScript tooling.",
+    "desc": "Installs the Node.js LTS runtime and verifies that node and npm are on PATH.",
+    "audience": ["developer"],
+    "guided": false,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id OpenJS.NodeJS.LTS -e --source winget"
+      },
+      "macos": {
+        "preferred": "brew",
+        "command": "brew install node"
+      },
+      "linux": {
+        "preferred": "apt",
+        "command": "sudo apt-get update && sudo apt-get install -y nodejs npm"
+      }
+    },
+    "verify": ["node --version", "npm --version"],
+    "requires_admin": false,
+    "requires_restart": false
+  },
+  {
+    "id": "git",
+    "type": "installer",
+    "icon": "branch",
+    "name": "Git",
+    "tagline": "Install Git for cloning repos, branching, and version control workflows.",
+    "desc": "Installs Git and verifies the CLI is available in the terminal.",
+    "audience": ["developer", "pm"],
+    "guided": false,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id Git.Git -e --source winget"
+      },
+      "macos": {
+        "preferred": "brew",
+        "command": "brew install git"
+      },
+      "linux": {
+        "preferred": "apt",
+        "command": "sudo apt-get update && sudo apt-get install -y git"
+      }
+    },
+    "verify": ["git --version"],
+    "requires_admin": false,
+    "requires_restart": false
+  },
+  {
+    "id": "pnpm",
+    "type": "installer",
+    "icon": "swap",
+    "name": "pnpm",
+    "tagline": "Install the pnpm package manager for fast, disk-efficient Node.js projects.",
+    "desc": "Installs pnpm globally so Bob can work with pnpm-based repositories.",
+    "audience": ["developer"],
+    "guided": false,
+    "install_methods": {
+      "windows": {
+        "preferred": "npm",
+        "command": "npm install -g pnpm"
+      },
+      "macos": {
+        "preferred": "npm",
+        "command": "npm install -g pnpm"
+      },
+      "linux": {
+        "preferred": "npm",
+        "command": "npm install -g pnpm"
+      }
+    },
+    "verify": ["pnpm --version"],
+    "requires_admin": false,
+    "requires_restart": false
+  },
+  {
+    "id": "uv",
+    "type": "installer",
+    "icon": "swap",
+    "name": "uv",
+    "tagline": "Install uv for fast Python environment and package management.",
+    "desc": "Installs Astral uv so Bob can create Python environments and sync dependencies quickly.",
+    "audience": ["developer", "data"],
+    "guided": false,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id Astral-sh.uv -e --source winget"
+      },
+      "macos": {
+        "preferred": "brew",
+        "command": "brew install uv"
+      },
+      "linux": {
+        "preferred": "script",
+        "command": "curl -LsSf https://astral.sh/uv/install.sh | sh"
+      }
+    },
+    "verify": ["uv --version"],
+    "requires_admin": false,
+    "requires_restart": false
+  },
+  {
+    "id": "docker-desktop",
+    "type": "installer",
+    "icon": "monitor",
+    "name": "Docker Desktop",
+    "tagline": "Install Docker for containers, local services, and Compose-based development.",
+    "desc": "Guided install for Docker Desktop, including first-run setup and daemon verification.",
+    "audience": ["developer", "devops"],
+    "guided": true,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id Docker.DockerDesktop -e --source winget",
+        "manual_steps": [
+          "Launch Docker Desktop after installation.",
+          "Complete the first-run setup wizard.",
+          "If prompted, enable WSL 2 integration and restart if required."
+        ]
+      },
+      "macos": {
+        "preferred": "brew",
+        "command": "brew install --cask docker",
+        "manual_steps": [
+          "Open Docker from Applications.",
+          "Grant any requested permissions and finish the setup flow."
+        ]
+      }
+    },
+    "verify": ["docker --version", "docker info"],
+    "requires_admin": true,
+    "requires_restart": true
+  },
+  {
+    "id": "visual-studio-build-tools",
+    "type": "installer",
+    "icon": "gear",
+    "name": "Visual Studio Build Tools",
+    "tagline": "Install MSVC and Windows SDK components needed for native builds on Windows.",
+    "desc": "Guided install for the Windows C/C++ toolchain required by some Python, Node.js, and Rust dependencies.",
+    "audience": ["developer"],
+    "guided": true,
+    "install_methods": {
+      "windows": {
+        "preferred": "winget",
+        "command": "winget install --id Microsoft.VisualStudio.2022.BuildTools -e --source winget",
+        "manual_steps": [
+          "In the installer, select Desktop development with C++.",
+          "Ensure MSVC v143 build tools and a recent Windows 10/11 SDK are selected.",
+          "Finish the wizard and reopen your terminal after installation."
+        ]
+      }
+    },
+    "verify": ["cl"],
+    "requires_admin": true,
+    "requires_restart": true
   }
 ]
