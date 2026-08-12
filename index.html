@@ -687,7 +687,87 @@
   };
 
   // ── Generate install prompt from registry entry ──────────
-  function buildPrompt(item) {
+  function buildBundlePrompt(allItems) {
+    var modes     = allItems.filter(function(x) { return x.type === 'mode'; });
+    var skills    = allItems.filter(function(x) { return x.type === 'skill'; });
+    var installers = allItems.filter(function(x) { return x.type === 'installer'; });
+
+    var lines = [];
+    lines.push('You are about to install the complete Bob Marketplace — every mode, skill, and system tool — in one shot. Execute each step in order and confirm completion of each section before moving to the next.\n');
+    lines.push('═══════════════════════════════════════════════');
+    lines.push('SECTION 1 OF 3 — MODES (' + modes.length + ')');
+    lines.push('═══════════════════════════════════════════════\n');
+    lines.push('Append each file below to ~/.bob/settings/custom_modes.yaml (create with a "customModes:" header if it does not exist).\n');
+    lines.push('macOS / Linux — run this block:');
+    lines.push('  mkdir -p ~/.bob/settings');
+    lines.push('  [ -f ~/.bob/settings/custom_modes.yaml ] || printf \'customModes:\\n\' > ~/.bob/settings/custom_modes.yaml');
+    modes.forEach(function(m) {
+      var fileUrl  = BASE + m.file;
+      var filename = m.file.split('/').pop();
+      lines.push('  curl -fsSL "' + fileUrl + '" -o /tmp/' + filename + ' && sed \'s/^  //\' /tmp/' + filename + ' | sed \'s/^/  /\' >> ~/.bob/settings/custom_modes.yaml && rm /tmp/' + filename);
+    });
+    lines.push('\nWindows PowerShell — run this block:');
+    lines.push('  $dest = "$HOME\\.bob\\settings\\custom_modes.yaml"');
+    lines.push('  New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null');
+    lines.push('  if (-not (Test-Path $dest)) { "customModes:" | Set-Content $dest -Encoding UTF8 }');
+    modes.forEach(function(m) {
+      var fileUrl  = BASE + m.file;
+      var filename = m.file.split('/').pop();
+      lines.push('  Invoke-WebRequest "' + fileUrl + '" -OutFile "$env:TEMP\\' + filename + '"; $raw=(Get-Content "$env:TEMP\\' + filename + '" -Raw -Encoding UTF8) -replace "`r`n","`n"; $entry=($raw -split "`n" | ForEach-Object { "  $_" }) -join "`n"; Add-Content $dest ("`n"+$entry) -Encoding UTF8; Remove-Item "$env:TEMP\\' + filename + '"');
+    });
+    lines.push('\nConfirm all modes are appended, then open the Bob mode picker to verify each appears:');
+    modes.forEach(function(m) { lines.push('  · ' + m.install_name); });
+
+    lines.push('\n═══════════════════════════════════════════════');
+    lines.push('SECTION 2 OF 3 — SKILLS (' + skills.length + ')');
+    lines.push('═══════════════════════════════════════════════\n');
+    lines.push('Download each skill file into its named subdirectory under ~/.bob/skills/.\n');
+    lines.push('macOS / Linux — run this block:');
+    skills.forEach(function(s) {
+      var fileUrl   = BASE + s.file;
+      var skillName = s.file.split('/').pop().replace(/\.md$/i, '');
+      lines.push('  mkdir -p ~/.bob/skills/' + skillName + ' && curl -fsSL "' + fileUrl + '" -o ~/.bob/skills/' + skillName + '/SKILL.md');
+    });
+    lines.push('\nWindows PowerShell — run this block:');
+    skills.forEach(function(s) {
+      var fileUrl   = BASE + s.file;
+      var skillName = s.file.split('/').pop().replace(/\.md$/i, '');
+      lines.push('  New-Item -ItemType Directory -Force -Path "$HOME\\.bob\\skills\\' + skillName + '" | Out-Null; Invoke-WebRequest "' + fileUrl + '" -OutFile "$HOME\\.bob\\skills\\' + skillName + '\\SKILL.md"');
+    });
+    lines.push('\nConfirm all skill files are saved.');
+
+    lines.push('\n═══════════════════════════════════════════════');
+    lines.push('SECTION 3 OF 3 — SYSTEM TOOLS (' + installers.length + ')');
+    lines.push('═══════════════════════════════════════════════\n');
+    lines.push('Run the installer for your platform. Skip any tool you already have installed.\n');
+    installers.forEach(function(inst) {
+      lines.push('── ' + inst.name + ' ──');
+      var methods = inst.install_methods || {};
+      ['windows', 'macos', 'linux'].forEach(function(platform) {
+        var method = methods[platform];
+        if (!method) return;
+        lines.push('  ' + capitalize(platform) + ': ' + method.command);
+        if (method.manual_steps && method.manual_steps.length) {
+          method.manual_steps.forEach(function(step) { lines.push('    - ' + step); });
+        }
+      });
+      if (inst.verify && inst.verify.length) {
+        lines.push('  Verify: ' + inst.verify.join('  |  '));
+      }
+      lines.push('');
+    });
+    lines.push('Confirm all tools are installed and verified.');
+    lines.push('\n═══════════════════════════════════════════════');
+    lines.push('DONE — Full Bob Marketplace installed.');
+    lines.push('═══════════════════════════════════════════════');
+    lines.push('Reload Bob to activate all modes. Skills are available immediately.');
+    return lines.join('\n');
+  }
+
+  function buildPrompt(item, allItems) {
+    if (item.type === 'bundle') {
+      return buildBundlePrompt(allItems || []);
+    }
     if (item.type === 'installer') {
       return buildInstallerPrompt(item);
     }
@@ -782,6 +862,7 @@
   var allCards        = [];
   var activeCard      = null;
   function accentVar(item) {
+    if (item.type === 'bundle') return 'var(--yellow, #f0ab00)';
     if (item.id === 'engineering-audit') return 'var(--red)';
     if (item.type === 'mode') return 'var(--purple)';
     if (item.type === 'installer') return 'var(--orange)';
@@ -803,8 +884,9 @@
     card.dataset.audience = item.audience.join(' ');
     card.dataset.search   = (item.name + ' ' + item.tagline + ' ' + item.desc + ' ' + item.audience.join(' ')).toLowerCase();
 
-    card._promptText = buildPrompt(item);
+    card._promptText = item.type === 'bundle' ? '' : buildPrompt(item);
     card._item = item;
+    // bundle prompt is built lazily in doCopy / openCard once DATA is available
     card._open = false;
 
     var chipsHtml = item.audience.map(function(a) {
@@ -834,7 +916,7 @@
         '</button>' +
         '<div class="card-note">' +
           '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
-          '<span><strong>Copied!</strong> Paste into Bob - it will install this ' + item.type + ' automatically.</span>' +
+          '<span><strong>Copied!</strong> Paste into Bob - it will install ' + (item.type === 'bundle' ? 'everything' : 'this ' + item.type) + ' automatically.</span>' +
         '</div>' +
       '</div>';
 
@@ -1088,15 +1170,20 @@
 
     DATA.forEach(function(item, idx) {
       var card = buildCard(item, idx);
+      // Resolve bundle prompt now that we have the full DATA array
+      if (item.type === 'bundle') {
+        card._promptText = buildBundlePrompt(DATA.filter(function(x) { return x.type !== 'bundle'; }));
+      }
       gridEl.appendChild(card);
       allCards.push(card);
     });
 
-    document.getElementById('hero-count').textContent      = DATA.length + ' entries';
-    document.getElementById('count-all').textContent       = DATA.length;
-    document.getElementById('count-mode').textContent      = DATA.filter(function(d) { return d.type === 'mode'; }).length;
-    document.getElementById('count-skill').textContent     = DATA.filter(function(d) { return d.type === 'skill'; }).length;
-    document.getElementById('count-installer').textContent = DATA.filter(function(d) { return d.type === 'installer'; }).length;
+    var nonBundle = DATA.filter(function(d) { return d.type !== 'bundle'; });
+    document.getElementById('hero-count').textContent      = nonBundle.length + ' entries';
+    document.getElementById('count-all').textContent       = nonBundle.length;
+    document.getElementById('count-mode').textContent      = nonBundle.filter(function(d) { return d.type === 'mode'; }).length;
+    document.getElementById('count-skill').textContent     = nonBundle.filter(function(d) { return d.type === 'skill'; }).length;
+    document.getElementById('count-installer').textContent = nonBundle.filter(function(d) { return d.type === 'installer'; }).length;
 
     updateAudienceCounts();
     applyFilters();
