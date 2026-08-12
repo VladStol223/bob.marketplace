@@ -65,6 +65,36 @@
     "audience": ["pm", "developer", "exec"]
   },
   {
+    "id": "pybob-python-mentor-skill",
+    "type": "skill",
+    "icon": "swap",
+    "file": "skills/pybob-python-mentor.md",
+    "name": "pybob-python-mentor",
+    "tagline": "Guided Python learning from zero to production-ready code.",
+    "desc": "Skill version of PyBob. Meets you at your current level with a guided curriculum, node-level challenges, retention scoring, and persistent progress. Diagnoses gaps, runs mini-challenges, and builds up to real scripts one concept at a time.",
+    "audience": ["learner", "developer"]
+  },
+  {
+    "id": "sqlbob-database-mentor-skill",
+    "type": "skill",
+    "icon": "db",
+    "file": "skills/sqlbob-database-mentor.md",
+    "name": "sqlbob-database-mentor",
+    "tagline": "Learn SQL from SELECT to advanced analytics, guided by a patient tutor.",
+    "desc": "Skill version of SqlBob. Teaches querying from scratch using real-world retail scenarios, explaining the WHY behind every clause. Runs interactive challenges and builds toward production-grade queries.",
+    "audience": ["learner", "developer", "data"]
+  },
+  {
+    "id": "ui-ux-pro-max-skill",
+    "type": "skill",
+    "icon": "grid",
+    "file": "skills/ui-ux-pro-max.md",
+    "name": "ui-ux-pro-max",
+    "tagline": "50+ styles, 161 palettes, 10 stacks — comprehensive UI/UX design intelligence.",
+    "desc": "Skill version of UI/UX Pro Max. Full design database: 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, 25 chart types across React, Next.js, Vue, Svelte, SwiftUI, Flutter, and more.",
+    "audience": ["developer", "pm"]
+  },
+  {
     "id": "linkedin-storyteller",
     "type": "skill",
     "icon": "chat",
