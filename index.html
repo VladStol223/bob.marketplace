@@ -781,10 +781,10 @@
   var currentQuery    = '';
   var allCards        = [];
   var activeCard      = null;
-
-  function accentVar(type) {
-    if (type === 'mode') return 'var(--purple)';
-    if (type === 'installer') return 'var(--orange)';
+  function accentVar(item) {
+    if (item.id === 'engineering-audit') return 'var(--red)';
+    if (item.type === 'mode') return 'var(--purple)';
+    if (item.type === 'installer') return 'var(--orange)';
     return 'var(--teal)';
   }
 
@@ -797,7 +797,7 @@
     var card = document.createElement('div');
     card.className = 'card';
     card.style.setProperty('--i', idx);
-    card.style.setProperty('--accent', accentVar(item.type));
+    card.style.setProperty('--accent', accentVar(item));
     card.dataset.type     = item.type;
     card.dataset.id       = item.id;
     card.dataset.audience = item.audience.join(' ');
@@ -865,7 +865,7 @@
 
     var item       = card._item;
     var promptText = card._promptText;
-    drawerEl.style.setProperty('--accent', accentVar(item.type));
+    drawerEl.style.setProperty('--accent', accentVar(item));
     drawerPadEl.innerHTML =
       '<p class="detail-desc">' + escapeHtml(item.desc) + '</p>' +
       '<div class="terminal">' +
@@ -1073,6 +1073,19 @@
 
   // ── Bootstrap — fetch registry.json ──────────────────────
   function renderRegistry(DATA) {
+    // Move engineering-audit to the front of the array so it displays first
+    var auditIdx = -1;
+    for (var i = 0; i < DATA.length; i++) {
+      if (DATA[i].id === 'engineering-audit') {
+        auditIdx = i;
+        break;
+      }
+    }
+    if (auditIdx > -1) {
+      var auditItem = DATA.splice(auditIdx, 1)[0];
+      DATA.unshift(auditItem);
+    }
+
     DATA.forEach(function(item, idx) {
       var card = buildCard(item, idx);
       gridEl.appendChild(card);
