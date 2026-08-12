@@ -1,5 +1,14 @@
 [
   {
+    "id": "install-everything",
+    "type": "bundle",
+    "icon": "list",
+    "name": "Install Everything",
+    "tagline": "One prompt to install every mode, skill, and tool in the marketplace.",
+    "desc": "Chains every mode, skill, and system installer from the Bob Marketplace into a single copy-paste prompt. Run it once in Bob and the full catalogue installs itself.",
+    "audience": ["developer", "learner", "pm", "exec", "data", "devops"]
+  },
+  {
     "id": "jenny-language-mentor",
     "type": "mode",
     "icon": "chat",
