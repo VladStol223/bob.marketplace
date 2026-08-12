@@ -44,28 +44,6 @@
     "install_name": "SqlBob Database Mentor"
   },
   {
-    "id": "ncfb-mainframe-mentor",
-    "type": "mode",
-    "icon": "monitor",
-    "file": "modes/ncfb-mainframe-mentor.yaml",
-    "name": "ZBob — Mainframe Mentor",
-    "tagline": "Patient z/OS, JCL, and Db2 on z tutor built for IBM i shops.",
-    "desc": "ZBob teaches z/OS, JCL, ISPF, SDSF, and Db2 on z from scratch using insurance-domain examples. Picks a track (Operator, JCL Developer, or Db2 Developer), quizzes every node, and never lets progress get lost between sessions.",
-    "audience": ["learner", "developer", "data"],
-    "install_name": "ZBob Mainframe Mentor"
-  },
-  {
-    "id": "ncfb-claims-adjuster",
-    "type": "mode",
-    "icon": "file",
-    "file": "modes/ncfb-claims-adjuster.yaml",
-    "name": "NCFB Claims Adjuster Coach",
-    "tagline": "Real-time claims coaching for property, hail, and auto total-loss adjusters.",
-    "desc": "Walks adjusters through coverage verification, damage type classification, deductible calculation, fraud flags, and documentation checklists — without ever making a final coverage decision on behalf of the agent.",
-    "audience": ["exec", "pm"],
-    "install_name": "NCFB Claims Adjuster Coach"
-  },
-  {
     "id": "ui-ux-pro-max",
     "type": "mode",
     "icon": "grid",
@@ -86,72 +64,6 @@
     "desc": "Perfectionist developer mode with encyclopedic knowledge of software architecture and system integrations. Follows a rigorous pipeline: blueprinting → TDD → comprehensive QA → flawless deployment. No oversights.",
     "audience": ["developer"],
     "install_name": "Master Developer"
-  },
-  {
-    "id": "agentic-sdlc",
-    "type": "mode",
-    "icon": "branch",
-    "file": "modes/agentic-sdlc.yaml",
-    "name": "Agentic SDLC Architect",
-    "tagline": "End-to-end IBM SDLC pipeline: Jira → DOORS → Solutions Designer → GitLab → Bob.",
-    "desc": "Builds lab guides and agentic workflows that walk teams through the full IBM SDLC pipeline. Generates runnable code without external API keys and enforces the 5-stage pipeline at every step.",
-    "audience": ["developer", "devops"],
-    "install_name": "Agentic SDLC Architect"
-  },
-  {
-    "id": "pentest",
-    "type": "mode",
-    "icon": "shield",
-    "file": "modes/pentest.yaml",
-    "name": "Penetration Tester",
-    "tagline": "Authorized red-team assessments, exploit scripting, and structured pentest reports.",
-    "desc": "Expert offensive security mode with knowledge of Burp Suite, Metasploit, Nmap, GTFOBins, and AI pentest agents. Categorizes findings via MITRE ATT&CK, writes structured reports, and only operates within authorized scope.",
-    "audience": ["developer", "devops"],
-    "install_name": "Penetration Tester"
-  },
-  {
-    "id": "n8n-architect",
-    "type": "mode",
-    "icon": "gear",
-    "file": "modes/n8n-architect.yaml",
-    "name": "n8n Workflow Architect",
-    "tagline": "Design, build, and deploy n8n automation workflows with live MCP integration.",
-    "desc": "Outputs valid n8n workflow JSON that can be directly imported. Structures workflows with proper error handling, retry logic, and modular sub-workflow patterns. Connects AI agents to external services via live n8n MCP.",
-    "audience": ["developer", "devops"],
-    "install_name": "n8n Workflow Architect"
-  },
-  {
-    "id": "rag-memory",
-    "type": "mode",
-    "icon": "db",
-    "file": "modes/rag-memory.yaml",
-    "name": "AI Memory & RAG Engineer",
-    "tagline": "Build persistent memory layers, vector DBs, and RAG pipelines for AI agents.",
-    "desc": "Designs memory systems with clear separation of short-term context, long-term storage, and retrieval. Implements hybrid search, semantic chunking, and evaluates retrieval quality with MRR, NDCG, and faithfulness scores.",
-    "audience": ["developer"],
-    "install_name": "AI Memory & RAG Engineer"
-  },
-  {
-    "id": "remotion-video",
-    "type": "mode",
-    "icon": "monitor",
-    "file": "modes/remotion-video.yaml",
-    "name": "Remotion Video Generator",
-    "tagline": "Programmatic video generation with React and Remotion.",
-    "desc": "Creates dynamic, data-driven, animated videos using web technologies. Uses frame-based rendering with useCurrentFrame() and interpolate() for smooth animations and efficient rendering configurations.",
-    "audience": ["developer", "pm"],
-    "install_name": "Remotion Video Generator"
-  },
-  {
-    "id": "ibmi-bob-developer",
-    "type": "mode",
-    "icon": "db",
-    "file": "modes/ibmi-bob-developer.yaml",
-    "name": "IBM i Bob Developer",
-    "tagline": "RPG, COBOL, CL, and Db2 for i — modernization and development on IBM i.",
-    "desc": "Expert IBM i developer mode covering OPM/ILE RPG, COBOL, CL, DDS, and Db2 for i. Handles RPG modernization, ILE architecture, SQL performance analysis, and incremental compile-test cycles.",
-    "audience": ["developer"],
-    "install_name": "IBM i Bob Developer"
   },
   {
     "id": "advanced-web-developer",
@@ -364,16 +276,6 @@
     "audience": ["pm", "exec"]
   },
   {
-    "id": "master-developer-skill",
-    "type": "skill",
-    "icon": "shield",
-    "file": "skills/master-developer.md",
-    "name": "master-developer",
-    "tagline": "Encyclopedic technical skill for flawless, zero-oversight production execution.",
-    "desc": "Skill version of the Master Developer persona. Enforces a zero-defect mindset: blueprint → TDD → QA → deploy. Use for critical projects where partial completion is not acceptable.",
-    "audience": ["developer"]
-  },
-  {
     "id": "master-storytelling",
     "type": "skill",
     "icon": "chat",
@@ -533,18 +435,9 @@
     "audience": ["developer", "data"],
     "guided": false,
     "install_methods": {
-      "windows": {
-        "preferred": "winget",
-        "command": "winget install --id Python.Python.3.12 -e --source winget"
-      },
-      "macos": {
-        "preferred": "brew",
-        "command": "brew install python@3.12"
-      },
-      "linux": {
-        "preferred": "apt",
-        "command": "sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-venv"
-      }
+      "windows": { "preferred": "winget", "command": "winget install --id Python.Python.3.12 -e --source winget" },
+      "macos": { "preferred": "brew", "command": "brew install python@3.12" },
+      "linux": { "preferred": "apt", "command": "sudo apt-get update && sudo apt-get install -y python3 python3-pip python3-venv" }
     },
     "verify": ["python --version", "pip --version"],
     "requires_admin": false,
@@ -560,18 +453,9 @@
     "audience": ["developer"],
     "guided": false,
     "install_methods": {
-      "windows": {
-        "preferred": "winget",
-        "command": "winget install --id OpenJS.NodeJS.LTS -e --source winget"
-      },
-      "macos": {
-        "preferred": "brew",
-        "command": "brew install node"
-      },
-      "linux": {
-        "preferred": "apt",
-        "command": "sudo apt-get update && sudo apt-get install -y nodejs npm"
-      }
+      "windows": { "preferred": "winget", "command": "winget install --id OpenJS.NodeJS.LTS -e --source winget" },
+      "macos": { "preferred": "brew", "command": "brew install node" },
+      "linux": { "preferred": "apt", "command": "sudo apt-get update && sudo apt-get install -y nodejs npm" }
     },
     "verify": ["node --version", "npm --version"],
     "requires_admin": false,
@@ -587,18 +471,9 @@
     "audience": ["developer", "pm"],
     "guided": false,
     "install_methods": {
-      "windows": {
-        "preferred": "winget",
-        "command": "winget install --id Git.Git -e --source winget"
-      },
-      "macos": {
-        "preferred": "brew",
-        "command": "brew install git"
-      },
-      "linux": {
-        "preferred": "apt",
-        "command": "sudo apt-get update && sudo apt-get install -y git"
-      }
+      "windows": { "preferred": "winget", "command": "winget install --id Git.Git -e --source winget" },
+      "macos": { "preferred": "brew", "command": "brew install git" },
+      "linux": { "preferred": "apt", "command": "sudo apt-get update && sudo apt-get install -y git" }
     },
     "verify": ["git --version"],
     "requires_admin": false,
@@ -614,18 +489,9 @@
     "audience": ["developer"],
     "guided": false,
     "install_methods": {
-      "windows": {
-        "preferred": "npm",
-        "command": "npm install -g pnpm"
-      },
-      "macos": {
-        "preferred": "npm",
-        "command": "npm install -g pnpm"
-      },
-      "linux": {
-        "preferred": "npm",
-        "command": "npm install -g pnpm"
-      }
+      "windows": { "preferred": "npm", "command": "npm install -g pnpm" },
+      "macos": { "preferred": "npm", "command": "npm install -g pnpm" },
+      "linux": { "preferred": "npm", "command": "npm install -g pnpm" }
     },
     "verify": ["pnpm --version"],
     "requires_admin": false,
@@ -641,18 +507,9 @@
     "audience": ["developer", "data"],
     "guided": false,
     "install_methods": {
-      "windows": {
-        "preferred": "winget",
-        "command": "winget install --id Astral-sh.uv -e --source winget"
-      },
-      "macos": {
-        "preferred": "brew",
-        "command": "brew install uv"
-      },
-      "linux": {
-        "preferred": "script",
-        "command": "curl -LsSf https://astral.sh/uv/install.sh | sh"
-      }
+      "windows": { "preferred": "winget", "command": "winget install --id Astral-sh.uv -e --source winget" },
+      "macos": { "preferred": "brew", "command": "brew install uv" },
+      "linux": { "preferred": "script", "command": "curl -LsSf https://astral.sh/uv/install.sh | sh" }
     },
     "verify": ["uv --version"],
     "requires_admin": false,
